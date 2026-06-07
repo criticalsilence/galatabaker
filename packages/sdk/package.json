@@ -3,10 +3,34 @@
   "version": "0.0.0",
   "private": true,
   "type": "module",
-  "description": "Tezos logic SDK (Adım 3)",
+  "description": "Tezos logic SDK — Taquito 17 + Beacon SDK 4 + TzKT + BLS",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
   "scripts": {
+    "build": "tsc -p tsconfig.build.json",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
-    "test": "vitest run"
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "dependencies": {
+    "@airgap/beacon-sdk": "^4.6.1",
+    "@airgap/beacon-types": "^4.6.1",
+    "@taquito/beacon-wallet": "^17.5.2",
+    "@taquito/signer": "^17.5.2",
+    "@taquito/taquito": "^17.5.2",
+    "bls-signatures": "^2.0.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.4"
   }
 }
