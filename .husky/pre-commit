@@ -1,0 +1,10 @@
+#!/usr/bin/env sh
+
+# Secret scan
+gitleaks protect --staged --no-banner
+
+# Lint + format on staged files
+pnpm exec lint-staged
+
+# Typecheck
+pnpm exec tsc --noEmit

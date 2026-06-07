@@ -1,0 +1,12 @@
+{
+  "name": "@galatabaker/web",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Next.js 14 frontend (Adım 4)",
+  "scripts": {
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
+  }
+}

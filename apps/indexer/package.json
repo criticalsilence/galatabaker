@@ -1,0 +1,12 @@
+{
+  "name": "@galatabaker/indexer",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Cycle/reward watcher (Adım 6)",
+  "scripts": {
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
+  }
+}

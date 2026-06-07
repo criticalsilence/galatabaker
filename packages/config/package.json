@@ -1,0 +1,12 @@
+{
+  "name": "@galatabaker/config",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Shared ESLint/TS configs",
+  "scripts": {
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
+  }
+}

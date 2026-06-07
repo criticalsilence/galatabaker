@@ -1,0 +1,12 @@
+{
+  "name": "@galatabaker/sdk",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Tezos logic SDK (Adım 3)",
+  "scripts": {
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
+  }
+}

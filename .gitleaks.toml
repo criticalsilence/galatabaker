@@ -1,0 +1,19 @@
+title = "GalataBaker Secret Scan"
+
+[extend]
+useDefault = true
+
+[allowlist]
+paths = [
+  '''node_modules/''',
+  '''dist/''',
+  '''.next/''',
+  '''coverage/''',
+  '''\.md$''',
+  '''\.lock$''',
+  '''\.env\.example$''',
+]
+regexes = [
+  '''xxx_replace_me''',
+  '''changeme''',
+]

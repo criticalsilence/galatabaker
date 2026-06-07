@@ -1,0 +1,54 @@
+# Node
+node_modules/
+.pnp/
+.pnp.js
+
+# Build outputs
+dist/
+build/
+.next/
+out/
+.turbo/
+
+# Test
+coverage/
+*.lcov
+.nyc_output
+
+# Env
+.env
+.env.local
+.env.*.local
+!.env.example
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+pnpm-debug.log*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+
+# Prisma
+*.db
+*.db-journal
+prisma/migrations/dev.db
+
+# Docker
+.docker-volumes/
+
+# Octez
+.octez-node/
+.tezos-client/
+octez-data/
+
+# Secret scan
+.gitleaks-report.json

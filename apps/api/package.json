@@ -1,0 +1,12 @@
+{
+  "name": "@galatabaker/api",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "NestJS 10 backend (Adım 5)",
+  "scripts": {
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
+  }
+}
