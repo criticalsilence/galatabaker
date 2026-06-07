@@ -1,10 +1,22 @@
 version: 2
+
+# Dependabot stratejisi:
+# - Tüm dependency'ler tek grup (PR sayısını azalt)
+# - Sadece patch + minor update'lere izin (major mainnet öncesi kontrollü)
+# - Açık PR limiti: 2 (5 → 2, gürültü azaltma)
+# - Schedule: weekly
 updates:
   - package-ecosystem: 'npm'
     directory: '/'
     schedule:
       interval: 'weekly'
-    open-pull-requests-limit: 5
+    open-pull-requests-limit: 2
     groups:
-      dev-dependencies:
-        patterns: ['*eslint*', '*prettier*', '*typescript*', '*vitest*', '*husky*']
+      all-dependencies:
+        patterns: ['*']
+    # MVP aşamasında major version sıçramaları breaking change riski taşır.
+    # Mainnet öncesi (Adım 9) her major update'i tek tek test ederek merge edeceğiz.
+    # Şimdilik sadece patch (güvenlik fix) + minor (yeni özellik) güncellemeleri geçer.
+    ignore:
+      - dependency-name: '*'
+        update-types: ['version-update:semver-major']
