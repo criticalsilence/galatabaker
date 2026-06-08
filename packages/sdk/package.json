@@ -4,12 +4,30 @@
   "private": true,
   "type": "module",
   "description": "Tezos logic SDK — Taquito 17 + Beacon SDK 4 + TzKT + BLS",
-  "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
+    },
+    "./network": {
+      "types": "./dist/network.d.ts",
+      "import": "./dist/network.js"
+    },
+    "./client": {
+      "types": "./dist/client.d.ts",
+      "import": "./dist/client.js"
+    },
+    "./wallet": {
+      "types": "./dist/wallet.d.ts",
+      "import": "./dist/wallet.js"
+    },
+    "./tzkt": {
+      "types": "./dist/tzkt.d.ts",
+      "import": "./dist/tzkt.js"
+    },
+    "./bls": {
+      "types": "./dist/bls.d.ts",
+      "import": "./dist/bls.js"
     }
   },
   "files": [
