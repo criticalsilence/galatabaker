@@ -1,0 +1,136 @@
+// GalataBaker API — Prisma schema.
+//
+// MVP scope: apps/web'in dashboard/rewards sayfalarını besleyecek
+// REST API'nin ihtiyaç duyduğu minimum 5 model. İleride genişletilebilir
+// (multi-signer, slashing, audit log vs.) ama YAGNI — gerekmedikçe
+// eklemeyin.
+//
+// Migration stratejisi: dev'de prisma migrate dev, prod'da
+// prisma migrate deploy (CI pipeline Task 11).
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = []
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  USER
+  ADMIN
+}
+
+enum DelegationStatus {
+  PENDING      // ops broadcast edildi, block confirmation bekliyor
+  CONFIRMED    // block'a girdi
+  FAILED       // op başarısız (gas, validation vs.)
+  CANCELLED    // kullanıcı iptal etti
+}
+
+enum RewardKind {
+  BAKING       // block producer reward
+  ENDORSING    // attester (eski adı: endorsement) reward
+  FEE          // transaction fees
+  DENUNCIATION // double-baking/attestation denunciation
+}
+
+enum NotificationChannel {
+  EMAIL
+  TELEGRAM
+}
+
+model User {
+  id             String   @id @default(cuid())
+  walletPkh      String   @unique
+  email          String?  @unique
+  telegramChatId String?  @unique
+  role           UserRole @default(USER)
+  preferences    Json?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  delegations   Delegation[]
+  rewards       Reward[]
+  notifications Notification[]
+
+  @@index([walletPkh])
+}
+
+model Baker {
+  pkh              String   @id
+  alias            String?
+  status           String
+  fee              Decimal  @db.Decimal(5, 3)
+  capacity         BigInt
+  totalStake       BigInt
+  delegatedBalance BigInt
+  blocksBaked      Int
+  missedBlocks     Int
+  lastSeen         DateTime?
+  metadata         Json?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  delegations Delegation[]
+
+  @@index([status])
+  @@index([totalStake])
+}
+
+model Delegation {
+  id           String           @id @default(cuid())
+  userId       String
+  user         User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  bakerPkh     String
+  baker        Baker            @relation(fields: [bakerPkh], references: [pkh], onDelete: Restrict)
+  amount       BigInt
+  opsHash      String?          @unique
+  status       DelegationStatus @default(PENDING)
+  blockLevel   Int?
+  blockTime    DateTime?
+  errorMessage String?
+  createdAt    DateTime         @default(now())
+  updatedAt    DateTime         @updatedAt
+
+  @@index([userId, createdAt])
+  @@index([bakerPkh])
+  @@index([status])
+}
+
+model Reward {
+  id             String     @id @default(cuid())
+  userId         String
+  user           User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  cycle          Int
+  kind           RewardKind
+  amount         BigInt
+  bakerPkh       String
+  opsHash        String
+  claimed        Boolean    @default(false)
+  claimedOpsHash String?
+  blockTime      DateTime
+  createdAt      DateTime   @default(now())
+
+  @@unique([userId, opsHash, kind])
+  @@index([userId, cycle])
+  @@index([bakerPkh, cycle])
+}
+
+model Notification {
+  id        String              @id @default(cuid())
+  userId    String
+  user      User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  channel   NotificationChannel
+  subject   String
+  body      String
+  sent      Boolean             @default(false)
+  sentAt    DateTime?
+  error     String?
+  createdAt DateTime            @default(now())
+
+  @@index([sent, createdAt])
+  @@index([userId])
+}
