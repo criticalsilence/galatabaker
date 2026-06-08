@@ -1,5 +1,7 @@
+import Link from 'next/link';
+
 import { truncateAddress } from '@/lib/format';
-import { getTzktClient, USHUAIA_TESTNET } from '@/lib/sdk-client';
+import { getTzktClient, BAKINGNET_TESTNET } from '@/lib/sdk-client';
 
 export const dynamic = 'force-dynamic';
 
@@ -20,16 +22,16 @@ export default async function DashboardPage() {
     <main className="container mx-auto px-4 py-12">
       <header className="mb-8 flex items-baseline justify-between">
         <h1 className="text-3xl font-bold">Dashboard</h1>
-        <a href="/" className="text-sm text-muted-foreground hover:text-foreground">
+        <Link href="/" className="text-sm text-muted-foreground hover:text-foreground">
           ← Home
-        </a>
+        </Link>
       </header>
 
       <section className="grid gap-4 sm:grid-cols-3">
-        <StatCard label="Network" value={USHUAIA_TESTNET.name} />
+        <StatCard label="Network" value={BAKINGNET_TESTNET.name} />
         <StatCard
-          label="RPC endpoint"
-          value={truncateAddress(USHUAIA_TESTNET.rpcUrl.replace(/^https?:\/\//, ''), 24, 0)}
+          label="RPC"
+          value={truncateAddress(BAKINGNET_TESTNET.rpcUrl.replace(/^https?:\/\//, ''), 24, 0)}
         />
         <StatCard
           label="Block height"
@@ -69,12 +71,12 @@ function StatCard({ label, value, sub }: { label: string; value: string; sub?: s
 
 function ActionCard({ href, title, body }: { href: string; title: string; body: string }) {
   return (
-    <a
+    <Link
       href={href}
       className="block rounded-lg border bg-card p-6 text-card-foreground shadow-sm transition-colors hover:bg-accent"
     >
       <h3 className="font-semibold">{title}</h3>
       <p className="mt-2 text-sm text-muted-foreground">{body}</p>
-    </a>
+    </Link>
   );
 }

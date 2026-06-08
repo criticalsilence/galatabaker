@@ -93,7 +93,7 @@ export class TzktClient {
 /**
  * Yapılandırılmış seçeneklerle TzktClient oluşturur.
  *
- * - network verilmezse Ushuaia testnet
+ * - network verilmezse Bakingnet testnet
  * - overrideRpcUrl verilirse onun origin'i baseUrl olur
  */
 export function createTzktClient(options: CreateTzktOptions = {}): TzktClient {

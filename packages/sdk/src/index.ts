@@ -4,7 +4,7 @@
  * GalataBaker Tezos SDK — Taquito 17, Beacon SDK 4, TzKT, BLS12-381.
  *
  * Modüller:
- *  - network: Ağ yapılandırması (Ushuaia testnet default)
+ *  - network: Ağ yapılandırması (Bakingnet testnet default)
  *  - client:  Tezos RPC client factory (TezosToolkit)
  *  - wallet:  Beacon wallet sarmalayıcı (Temple/Kukai/Galleon)
  *  - tzkt:    TzKT indexer typed client

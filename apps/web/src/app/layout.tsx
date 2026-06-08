@@ -3,7 +3,7 @@ import './globals.css';
 
 export const metadata: Metadata = {
   title: 'GalataBaker — Tezos Baking & Staking',
-  description: 'Decentralized baking and delegation for the Tezos network (Ushuaia testnet MVP).',
+  description: 'Decentralized baking and delegation for the Tezos network (Bakingnet testnet MVP).',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

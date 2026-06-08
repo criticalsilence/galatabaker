@@ -1,6 +1,6 @@
 import { createTezosClient } from '@galatabaker/sdk/client';
 import {
-  USHUAIA_TESTNET,
+  BAKINGNET_TESTNET,
   type TezosNetworkConfig,
   type NetworkKey,
 } from '@galatabaker/sdk/network';
@@ -34,4 +34,4 @@ export function getTzktClient(network?: NetworkKey | TezosNetworkConfig) {
   return network ? createTzktClient({ network }) : _tzkt!;
 }
 
-export { USHUAIA_TESTNET };
+export { BAKINGNET_TESTNET };

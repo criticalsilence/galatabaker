@@ -13,8 +13,8 @@ export default function DelegatePage() {
       <section className="rounded-lg border bg-card p-8 text-card-foreground shadow-sm">
         <h2 className="text-xl font-semibold">Coming in Adım 5</h2>
         <p className="mt-3 text-sm text-muted-foreground">
-          Delegation flow needs a connected wallet and a target baker. In the MVP (Ushuaia testnet)
-          you will be able to:
+          Delegation flow needs a connected wallet and a target baker. In the MVP (Bakingnet
+          testnet) you will be able to:
         </p>
         <ul className="mt-4 list-disc space-y-2 pl-6 text-sm text-muted-foreground">
           <li>Browse the active baker set via TzKT</li>
@@ -22,7 +22,7 @@ export default function DelegatePage() {
           <li>Re-delegate or withdraw at any time</li>
         </ul>
         <p className="mt-6 text-sm text-muted-foreground">
-          Until then, test in your wallet (Temple) directly on the Ushuaia faucet.
+          Until then, test in your wallet (Temple) directly on the Bakingnet faucet.
         </p>
       </section>
     </main>

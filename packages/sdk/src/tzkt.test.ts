@@ -1,9 +1,9 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 
-import { USHUAIA_TESTNET } from './network.js';
+import { BAKINGNET_TESTNET } from './network.js';
 import { TzktClient, createTzktClient } from './tzkt.js';
 
-const baseUrl = USHUAIA_TESTNET.tzktUrl;
+const baseUrl = BAKINGNET_TESTNET.tzktUrl;
 
 function makeFetchOk(payload: unknown): typeof fetch {
   return vi.fn(async () => ({

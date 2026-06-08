@@ -29,7 +29,7 @@ export default function HomePage() {
         <p className="mt-4 text-xl text-muted-foreground">
           Tezos baking and delegation, made simple.
         </p>
-        <p className="mt-2 text-sm text-muted-foreground">MVP — Ushuaia testnet</p>
+        <p className="mt-2 text-sm text-muted-foreground">MVP — Bakingnet testnet</p>
         <div className="mt-8 flex flex-wrap justify-center gap-3">
           <WalletConnect />
           <Link
