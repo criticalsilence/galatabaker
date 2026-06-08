@@ -10,7 +10,14 @@
   "packageManager": "pnpm@9.12.0",
   "pnpm": {
     "overrides": {
-      "bs58check": "3.0.1"
+      "bs58check": "3.0.1",
+      "@airgap/beacon-core": "4.8.0",
+      "@airgap/beacon-dapp": "4.8.1",
+      "@airgap/beacon-transport-matrix": "4.8.0",
+      "@airgap/beacon-transport-postmessage": "4.8.0",
+      "@airgap/beacon-ui": "4.8.0",
+      "@airgap/beacon-utils": "4.8.0",
+      "@airgap/beacon-wallet": "4.8.1"
     }
   },
   "scripts": {

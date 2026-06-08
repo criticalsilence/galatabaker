@@ -6,6 +6,13 @@ settings:
 
 overrides:
   bs58check: 3.0.1
+  '@airgap/beacon-core': 4.8.0
+  '@airgap/beacon-dapp': 4.8.1
+  '@airgap/beacon-transport-matrix': 4.8.0
+  '@airgap/beacon-transport-postmessage': 4.8.0
+  '@airgap/beacon-ui': 4.8.0
+  '@airgap/beacon-utils': 4.8.0
+  '@airgap/beacon-wallet': 4.8.1
 
 importers:
 
@@ -122,7 +129,7 @@ importers:
         version: 4.8.0
       '@taquito/beacon-wallet':
         specifier: ^17.5.2
-        version: 17.5.2(typescript@5.9.3)
+        version: 17.5.2
       '@taquito/signer':
         specifier: ^17.5.2
         version: 17.5.2
@@ -143,23 +150,14 @@ importers:
 
 packages:
 
-  '@adraffy/ens-normalize@1.11.1':
-    resolution: {integrity: sha512-nhCBV3quEgesuf7c7KYfperqSS14T8bYuvJ8PcLJp6znkZpFc0AuW4qBtr8eKVyPPe/8RSr7sglCWPU5eaxwKQ==}
-
   '@airgap/beacon-blockchain-substrate@4.8.0':
     resolution: {integrity: sha512-TIY8sn0SEZy62Lj1iCeU6E06dvF8wS+UdB9JroRRTHqOiGQXLhrwRqOJZdCEblr4d7I3Yavqr1SJ3D7B8JxUxA==}
 
   '@airgap/beacon-blockchain-tezos@4.8.0':
     resolution: {integrity: sha512-4ND+YvfUCC3GI4DxcJH+SdLWqXw2nw9KojxU/EAW2v7gkZgRaC+NIDa2VcRuglSgQ2+oRthKDCZtk3kEYXGgvg==}
 
-  '@airgap/beacon-core@4.1.0':
-    resolution: {integrity: sha512-BZNfOvnqUL+M85PtQMNk2qnVV0uRmoM0PfD4wB3yyndUXNxH/WWhUQWpNBbbjpFTS9LbVgHzAk5M+i53HXY4iA==}
-
   '@airgap/beacon-core@4.8.0':
     resolution: {integrity: sha512-Cdzg8U0FQnuhZwLRtJGV1E3FIMkX5PfDHV+BTEGHZot+SWRpbvr0JgaoeAZ5NCiQ5G6SSNTh264fte+p2Ca5BQ==}
-
-  '@airgap/beacon-dapp@4.1.0':
-    resolution: {integrity: sha512-06rsAqNHK0QL3uh7KXYZzXk9XYzaLYR8t2XYkm716oK/8iiCPFUTLSiMbhIBCd/ZVr3w5iFRfBULmBsY/U6+PQ==}
 
   '@airgap/beacon-dapp@4.8.1':
     resolution: {integrity: sha512-HxDsMoKlJlzCynVFuVXT54ivYkUydWjrfPLuT04mPsZRaJToOuFg72bJFlYzeE3iZKZRNPjOIyAPkmkJZEGnZQ==}
@@ -167,38 +165,20 @@ packages:
   '@airgap/beacon-sdk@4.8.1':
     resolution: {integrity: sha512-PmlIdFc2ujjW4u4MQy2aXt9RNaGFAIXFA+dIT5ESSuqV/yiAB9BBztWDEmv5e8L92eIr+aBbadK2M7lQWclhxw==}
 
-  '@airgap/beacon-transport-matrix@4.1.0':
-    resolution: {integrity: sha512-dg1ojQKAtajgByCPS6iHjpUBiPIRPDPmSyq+6n1FFt/nlziQs00GSNGCKlQFpCOClksL0UYAXE6c9n+UeGUSJQ==}
-
-  '@airgap/beacon-transport-matrix@4.8.1':
-    resolution: {integrity: sha512-5E+dptensprPpnsW30xT7J0CcFSQ8m7uKPPNMT8Oo8JABKWo8UJC6JSCvv5scklJGnyrbIJhXGns8OAa3flkbg==}
-
-  '@airgap/beacon-transport-postmessage@4.1.0':
-    resolution: {integrity: sha512-8lB5uLvhpU5M2lC2jCztIStdQQvYTbwJT2W0fa+D0u76yShuyOOZ8FWIrefFarPqQzO26aeEcxeLXlxCwb+7JA==}
+  '@airgap/beacon-transport-matrix@4.8.0':
+    resolution: {integrity: sha512-yQY0QN/1cyM6RLBwDz3LdgZ80FnYGC7nj0u7uo/VedtvUxSYHSK09+LvC0137OsW3bIOu5P+KzqQpOtoR4FcqA==}
 
   '@airgap/beacon-transport-postmessage@4.8.0':
     resolution: {integrity: sha512-IAk8sW0S5/cyVGNW+5WUz2BrXdTe8enoLqc3n8HihegmcoDFSBaZAfLt6oCvOutv64z8dEZBblee/N1gBwwp8Q==}
 
-  '@airgap/beacon-transport-walletconnect@4.1.0':
-    resolution: {integrity: sha512-ZlX8uXvAieGS6+WmfLo9dstiZAGr9UR3Uw5fpOCqINn1bAN6roSlA8bfj7O4xq8w7XpX4K9kxLdODKxTB4vLUQ==}
-
   '@airgap/beacon-transport-walletconnect@4.8.0':
     resolution: {integrity: sha512-Rwr1JQp9G313KdLaya/plITLg0ZnAoPPEB58bKN35G1auGyL67HHZ0ti7zcnpl95nduE/BTeDw/J8rSZDxX5zg==}
-
-  '@airgap/beacon-types@4.1.0':
-    resolution: {integrity: sha512-PoIyFCifPpbVp57Pq1ZHxgteSwm+Ny1GuqDUKHcnh9G6dv+35QoMVrePVAtdU4S4qyFdgsa4SCeZLp9BWBhp2w==}
 
   '@airgap/beacon-types@4.8.0':
     resolution: {integrity: sha512-KSoDlWxeqaQ5h/biqxp/kx2asv+zfW4yDp4gKXGpgbkI6WbW300fTMCaMzl5hi5gGBtAsItLwE2BWGH2hQ9yPw==}
 
-  '@airgap/beacon-ui@4.1.0':
-    resolution: {integrity: sha512-YTlsa2nnQdwNu0gXjjOWL1YKDtcUf6lGu/sxb6QsoHWpPu3DfDAD4orecrn6LAOQRr55tf20wEmkMQrG2gCnGg==}
-
   '@airgap/beacon-ui@4.8.0':
     resolution: {integrity: sha512-DDIywNp3w6oZOSHoi32KAwQz3bs59Blrhnqq0iMTJuO0b7+MKNchTblx6wXc6Nc/pPcVZlOJXzdpmBsct9bMFw==}
-
-  '@airgap/beacon-utils@4.1.0':
-    resolution: {integrity: sha512-zr8yNseFt3Dz/g6G/DXhuUW97Rgfdju9KIUuNYt6eaaLXPyP1xGB84U3LnlahzCifaIz3FXPH1TfMhLB+TePbA==}
 
   '@airgap/beacon-utils@4.8.0':
     resolution: {integrity: sha512-ywXoqaGa6xOlVXCthxtCfjzzR8y1MGBUSqTlzQiXlLCSB0+rrrl7qehckoIMBEuEfY/bVxwey1aVb08sWl11vA==}
@@ -543,10 +523,6 @@ packages:
   '@jridgewell/trace-mapping@0.3.31':
     resolution: {integrity: sha512-zzNR+SdQSDJzc8joaeP8QQoCQr8NuYx2dIIytl1QeBEZHJ9uW6hebsrYgbz8hJwUQao3TWCMtmfV8Nu1twOLAw==}
 
-  '@msgpack/msgpack@3.1.3':
-    resolution: {integrity: sha512-47XIizs9XZXvuJgoaJUIE2lFoID8ugvc0jzSHP+Ptfk8nTbnR8g788wv48N03Kx0UkAv559HWRQ3yzOgzlRNUA==}
-    engines: {node: '>= 18'}
-
   '@napi-rs/wasm-runtime@1.1.4':
     resolution: {integrity: sha512-3NQNNgA1YSlJb/kMH1ildASP9HW7/7kYnRI2szWJaofaS1hWmbGI4H+d3+22aGzXXN9IJ+n+GiFVcGipJP18ow==}
     peerDependencies:
@@ -614,24 +590,12 @@ packages:
     resolution: {integrity: sha512-rONPWMC7PeExE077uLE4oqWrZ1IvAfz3oH9LibVAcVCopJiA9R62uavnbEzdkVmJYI6M6Zgkbeb07+tWjlq2XA==}
     engines: {node: ^14.21.3 || >=16}
 
-  '@noble/ciphers@1.3.0':
-    resolution: {integrity: sha512-2I0gnIVPtfnMw9ee9h1dJG7tp81+8Ob3OJb3Mv37rx5L40/b0i7djjCVvGOVqc9AEIQyvyu1i6ypKdFw8R8gQw==}
-    engines: {node: ^14.21.3 || >=16}
-
   '@noble/curves@1.8.0':
     resolution: {integrity: sha512-j84kjAbzEnQHaSIhRPUmB3/eVXu2k3dKPl2LOrR8fSOIL+89U+7lV117EWHtq/GHM3ReGHM46iRBdZfpc4HRUQ==}
     engines: {node: ^14.21.3 || >=16}
 
   '@noble/curves@1.8.1':
     resolution: {integrity: sha512-warwspo+UYUPep0Q+vtdVB4Ugn8GGQj8iyB3gnRWsztmUHTI3S1nhdiWNsPUGL0vud7JlRRk1XEu7Lq1KGTnMQ==}
-    engines: {node: ^14.21.3 || >=16}
-
-  '@noble/curves@1.9.1':
-    resolution: {integrity: sha512-k11yZxZg+t+gWvBbIswW0yoJlu8cHOC7dhunwOzoWH/mXGBiYyR4YY6hAEK/3EUs4UpB8la1RfdRpeGsFHkWsA==}
-    engines: {node: ^14.21.3 || >=16}
-
-  '@noble/curves@1.9.7':
-    resolution: {integrity: sha512-gbKGcRUYIjA3/zCCNaWDciTMFI0dCkvou3TL8Zmy5Nc7sJ47a0jtOeZoTaMxkuqRo9cRhjOdZJXegxYE5FN/xw==}
     engines: {node: ^14.21.3 || >=16}
 
   '@noble/hashes@1.7.0':
@@ -790,15 +754,6 @@ packages:
   '@rtsao/scc@1.1.0':
     resolution: {integrity: sha512-zt6OdqaDoOnJ1ZYsCYGt9YmWzDXl4vQdKTyJev62gFhRGKdx7mcT54V9KIjg+d2wi9EXsPvAPKe7i7WjfVWB8g==}
 
-  '@scure/base@1.2.6':
-    resolution: {integrity: sha512-g/nm5FgUa//MCj1gV09zTJTaM6KBAHqLN907YVQqf7zC49+DcO4B1so4ZX07Ef10Twr6nuqYEH9GEggFXA4Fmg==}
-
-  '@scure/bip32@1.7.0':
-    resolution: {integrity: sha512-E4FFX/N3f4B80AKWp5dP6ow+flD1LQZo/w8UnLGYZO674jS6YnYeepycOOksv+vLPSpgN35wgKgy+ybfTb2SMw==}
-
-  '@scure/bip39@1.6.0':
-    resolution: {integrity: sha512-+lF0BbLiJNwVlev4eKelw1WWLaiKXw7sSl8T6FvBlWkdX+94aGJ4o8XjUdlyhTCjd8c+B3KT3JfS8P0bLRNU6A==}
-
   '@sinclair/typebox@0.27.10':
     resolution: {integrity: sha512-MTBk/3jGLNB2tVxv6uLlFh1iu64iYOQ2PbdOSK3NW8JZsmlaOh2q6sdtKowBhfw8QFLmYNzTW4/oK4uATIi6ZA==}
 
@@ -886,9 +841,6 @@ packages:
   '@stablelib/sha512@2.0.1':
     resolution: {integrity: sha512-DUNe5cbnoH3sSIN+MG04RvTCLXtkbyy/SnQxiNO+GgF/KSXkkUSlF6mUVvCUdZBZ2X3NgogR+tAvaRSn8wxnLw==}
 
-  '@stablelib/utf8@1.0.2':
-    resolution: {integrity: sha512-sDL1aB2U8FIpj7SjQJMxbOFIFkKvDKQGPHSrYejHZhtLNSK3qHe6ZIfa0woWkOiaJsdYslFzrc0VWXJZHmSIQQ==}
-
   '@stablelib/utf8@2.1.0':
     resolution: {integrity: sha512-peZgjgrPYOvjbJcVp91yYQLocr/qw5zcLsQBL+vH3D/d0IS+Cvcsbvlu+LLEcG8sVbkWMxr0ZABhY/0t3JMh0w==}
 
@@ -897,9 +849,6 @@ packages:
 
   '@stablelib/wipe@2.0.1':
     resolution: {integrity: sha512-1eU2K9EgOcV4qc9jcP6G72xxZxEm5PfeI5H55l08W95b4oRJaqhmlWRc4xZAm6IVSKhVNxMi66V67hCzzuMTAg==}
-
-  '@stablelib/x25519-session@1.0.4':
-    resolution: {integrity: sha512-UZw67EJWSNTaou7Qp086fzGek7crrCQl2K7MoqEzslXxrm6vybySfcdsqaZ0ZpKq19IHWK8G0wAlFBy70srm3w==}
 
   '@stablelib/x25519-session@2.0.1':
     resolution: {integrity: sha512-GQrplqJsHiKwrXBoUpwpguaydLQbCiemcyeitnlDyTHhbtv3x5DO7zmZFac1RBIBxcdfYCwW6RaGmRdBKNm6Zg==}
@@ -978,9 +927,6 @@ packages:
 
   '@types/bs58check@2.1.2':
     resolution: {integrity: sha512-xpXaQlOIY1KoXlA/ytHGHpEIU87PJt+g9SH7nC6HdCgaBwT2IEZIwBMHbjuX6BpnfbiUMlmwqurdLDwXpcdmSA==}
-
-  '@types/chrome@0.0.246':
-    resolution: {integrity: sha512-MxGxEomGxsJiL9xe/7ZwVgwdn8XVKWbPvxpVQl3nWOjrS0Ce63JsfzxUc4aU3GvRcUPYsfufHmJ17BFyKxeA4g==}
 
   '@types/chrome@0.0.315':
     resolution: {integrity: sha512-Oy1dYWkr6BCmgwBtOngLByCHstQ3whltZg7/7lubgIZEYvKobDneqplgc6LKERNRBwckFviV4UU5AZZNUFrJ4A==}
@@ -1208,10 +1154,6 @@ packages:
     resolution: {integrity: sha512-i/olu/IwYtBiWYqyfNUMxq4b6QS5dv+ZVVGmLT2buRwdH6MGETN0Bx3/z6rXJzd1sNd+QL07fxhSFxCekL57tA==}
     engines: {node: '>=18'}
 
-  '@walletconnect/core@2.23.9':
-    resolution: {integrity: sha512-ws4WG8LeagUo2ERRo02HryXRcpwIRmCQ3pHLW5gWbVReLXXIpgk6ZAfID3fEGHevIwwnHSGww+nNhNpdXyiq0g==}
-    engines: {node: '>=18.20.8'}
-
   '@walletconnect/environment@1.0.1':
     resolution: {integrity: sha512-T426LLZtHj8e8rYnKfzsw1aG6+M0BT1ZxayMdv/p8yM0MU+eJDISqNY3/bccxRr4LrF9csq02Rhqt08Ibl0VRg==}
 
@@ -1244,9 +1186,6 @@ packages:
   '@walletconnect/logger@2.1.2':
     resolution: {integrity: sha512-aAb28I3S6pYXZHQm5ESB+V6rDqIYfsnHaQyzFbwUUBFY4H0OXx/YtTl8lvhUNhMMfb9UxbwEBS253TlXUYJWSw==}
 
-  '@walletconnect/logger@3.0.2':
-    resolution: {integrity: sha512-7wR3wAwJTOmX4gbcUZcFMov8fjftY05+5cO/d4cpDD8wDzJ+cIlKdYOXaXfxHLSYeDazMXIsxMYjHYVDfkx+nA==}
-
   '@walletconnect/relay-api@1.0.11':
     resolution: {integrity: sha512-tLPErkze/HmC9aCmdZOhtVmYZq1wKfWTJtygQHoWtgg722Jd4homo54Cs4ak2RUFUZIGO2RsOpIcWipaua5D5Q==}
 
@@ -1260,23 +1199,14 @@ packages:
     resolution: {integrity: sha512-oUjlRIsbHxMSRif2WvMRdvm6tMsQjMj07rl7YVcKVvZ1gF1/9GcbJPjzL/U87fv8qAQkVhIlbEg2vHaVYf6J/g==}
     deprecated: 'Reliability and performance improvements. See: https://github.com/WalletConnect/walletconnect-monorepo/releases'
 
-  '@walletconnect/sign-client@2.23.9':
-    resolution: {integrity: sha512-Xj+hw4E6mGRyhCdVOT/RMgnG+up/Y3v0ho5PlkVozvXWeVSqHNh9DmjLuU97a7OACoGd/oHBF6g3NVqD7MgCMQ==}
-
   '@walletconnect/time@1.0.2':
     resolution: {integrity: sha512-uzdd9woDcJ1AaBZRhqy5rNC9laqWGErfc4dxA9a87mPdKOgWMD85mcFo9dIYIts/Jwocfwn07EC6EzclKubk/g==}
 
   '@walletconnect/types@2.18.0':
     resolution: {integrity: sha512-g0jU+6LUuw3E/EPAQfHNK2xK/95IpRfz68tdNAFckLmefZU6kzoE1mIM1SrPJq8rT9kUPp6/APMQE+ReH2OdBA==}
 
-  '@walletconnect/types@2.23.9':
-    resolution: {integrity: sha512-IUl1PpD/Dig8IE2OZ9XtjbPohEyOZJ73xs92EDUzoIyzRtfm36g2D340pY3iu3AAdLv1yFiaZafB8Hf8RFze8A==}
-
   '@walletconnect/utils@2.18.0':
     resolution: {integrity: sha512-6AUXIcjSxTHGRsTtmUP/oqudtwRILrQqrJsH3jS5T28FFDzZt7+On6fR4mXzi64k4nNYeWg1wMCGLEdtxmGbZQ==}
-
-  '@walletconnect/utils@2.23.9':
-    resolution: {integrity: sha512-C5TltCs8UPypNiteYnKSv8+ZDK2EjVDyXCxN6kA9bkA+j6KGsNIV7l9MUA8WBAvE5Gi5EcBdhD3R9Hpo/1HHqQ==}
 
   '@walletconnect/window-getters@1.0.1':
     resolution: {integrity: sha512-vHp+HqzGxORPAN8gY03qnbTMnhqIwjeRJNOMOAzePRg4xVEEE2WvYsI9G2NMjOknA8hnuYbU3/hwLcKbjhc8+Q==}
@@ -1287,17 +1217,6 @@ packages:
   JSONStream@1.3.5:
     resolution: {integrity: sha512-E+iruNOY8VV9s4JEbe1aNEm6MiszPRr/UfcHMz0TQh1BXSxHK+ASV1R6W4HpjBhSeS+54PIsAMCBmwD06LLsqQ==}
     hasBin: true
-
-  abitype@1.2.4:
-    resolution: {integrity: sha512-dpKH+N27vRjarMVTFFkeY445VTKftzGWpL0FiT7xmVmzQRKazZexzC5uHG0f6XKsVLAuUlndnbGau6lRejClxg==}
-    peerDependencies:
-      typescript: '>=5.0.4'
-      zod: ^3.22.0 || ^4.0.0
-    peerDependenciesMeta:
-      typescript:
-        optional: true
-      zod:
-        optional: true
 
   acorn-jsx@5.3.2:
     resolution: {integrity: sha512-rq9s+JNhf0IChjtDXxllJ7g41oZk5SlXtp0LHwyA5cejwn7vKmKp4pPri6YEePv2PU65sAsegbXtIinmDFDXgQ==}
@@ -1801,9 +1720,6 @@ packages:
     resolution: {integrity: sha512-w+5mJ3GuFL+NjVtJlvydShqE1eN3h3PbI7/5LAsYJP/2qtuMXjfL2LpHSRqo4b4eSF5K/DH1JXKUAHSB2UW50g==}
     engines: {node: '>= 0.4'}
 
-  es-toolkit@1.44.0:
-    resolution: {integrity: sha512-6penXeZalaV88MM3cGkFZZfOoLGWshWWfdy0tWw/RlVVyhvMaWSBTOvXNeiW3e5FwdS5ePW0LGEu17zT139ktg==}
-
   esbuild@0.21.5:
     resolution: {integrity: sha512-mg3OPMV4hXywwpoDxu3Qda5xCKQi+vCTZq8S9J/EpkhB2HzKXq4SNFZE3+NK93JYxc8VMSep+lOUSC/RVKaBqw==}
     engines: {node: '>=12'}
@@ -1915,9 +1831,6 @@ packages:
 
   eventemitter3@4.0.7:
     resolution: {integrity: sha512-8guHBZCwKnFhYdHr2ysuRWErTwhoN2X8XELRlrRwpmfeY2jjuUN4taQMsULKUVo1K4DvZl+0pgfyoysHxvmvEw==}
-
-  eventemitter3@5.0.1:
-    resolution: {integrity: sha512-GWkBvjiSZK87ELrYOSESUYeVIc9mvLLf/nXalMOS5dYrgZq9o5OVkbZAVM06CVxYsCwH9BDZFPlQTlPA1j4ahA==}
 
   eventemitter3@5.0.4:
     resolution: {integrity: sha512-mlsTRyGaPBjPedk6Bvw+aqbsXDtoAyAzm5MO7JgU+yVRyMQ5O8bD4Kcci7BS85f93veegeCPkL8R4GLClnjLFw==}
@@ -2634,10 +2547,6 @@ packages:
   on-exit-leak-free@0.2.0:
     resolution: {integrity: sha512-dqaz3u44QbRXQooZLTUKU41ZrzYrcvLISVgbrzbyCMxpmSLJvZ3ZamIJIZ29P6OhZIkNIQKosdeM6t1LYbA9hg==}
 
-  on-exit-leak-free@2.1.2:
-    resolution: {integrity: sha512-0eJJY6hXLGf1udHwfNftBqH+g73EU4B504nZeKpz1sYRKafAghwxEJunB2O7rDZkL4PGfsMVnTXZ2EjibbqcsA==}
-    engines: {node: '>=14.0.0'}
-
   once@1.4.0:
     resolution: {integrity: sha512-lNaJgI+2Q5URQBkccEKHTQOPaXdUxnZZElQTZY0MFUAuaEqe1E+Nyvgdz/aIyNi6Z9MzO5dv1H8n58/GELp3+w==}
 
@@ -2656,14 +2565,6 @@ packages:
   own-keys@1.0.1:
     resolution: {integrity: sha512-qFOyK5PjiWZd+QQIh+1jhdb9LpxTF0qs7Pm8o5QHYZ0M3vKqSqzsZaEB6oWlxZ+q2sJBMI/Ktgd2N5ZwQoRHfg==}
     engines: {node: '>= 0.4'}
-
-  ox@0.9.3:
-    resolution: {integrity: sha512-KzyJP+fPV4uhuuqrTZyok4DC7vFzi7HLUFiUNEmpbyh59htKWkOC98IONC1zgXJPbHAhQgqs6B0Z6StCGhmQvg==}
-    peerDependencies:
-      typescript: '>=5.4.0'
-    peerDependenciesMeta:
-      typescript:
-        optional: true
 
   p-finally@1.0.0:
     resolution: {integrity: sha512-LICb2p9CB7FS+0eR1oqWnHhp0FljGLZCWBE9aix0Uye9W8LTQPwMTYVGWQWIw9RdQiDg4+epXQODwIYJtSJaow==}
@@ -2760,18 +2661,8 @@ packages:
   pino-abstract-transport@0.5.0:
     resolution: {integrity: sha512-+KAgmVeqXYbTtU2FScx1XS3kNyfZ5TrXY07V96QnUSFqo2gAqlvmaxH67Lj7SWazqsMabf+58ctdTcBgnOLUOQ==}
 
-  pino-abstract-transport@2.0.0:
-    resolution: {integrity: sha512-F63x5tizV6WCh4R6RHyi2Ml+M70DNRXt/+HANowMflpgGFMAym/VKm6G7ZOQRjqN7XbGxK1Lg9t6ZrtzOaivMw==}
-
   pino-std-serializers@4.0.0:
     resolution: {integrity: sha512-cK0pekc1Kjy5w9V2/n+8MkZwusa6EyyxfeQCB799CQRhRt/CqYKiWs5adeu8Shve2ZNffvfC/7J64A2PJo1W/Q==}
-
-  pino-std-serializers@7.1.0:
-    resolution: {integrity: sha512-BndPH67/JxGExRgiX1dX0w1FvZck5Wa4aal9198SrRhZjH3GxKQUKIBnYJTdj2HDN3UQAS06HlfcSbQj2OHmaw==}
-
-  pino@10.0.0:
-    resolution: {integrity: sha512-eI9pKwWEix40kfvSzqEP6ldqOoBIN7dwD/o91TY5z8vQI12sAffpR/pOqAD1IVVwIVHDpHjkq0joBPdJD0rafA==}
-    hasBin: true
 
   pino@7.11.0:
     resolution: {integrity: sha512-dMACeu63HtRLmCG8VKdy4cShCPKaYDR4youZqoSWLxl5Gu99HUw8bw75thbPv9Nip+H+QYX8o3ZJbTdVZZ2TVg==}
@@ -2858,9 +2749,6 @@ packages:
   process-warning@1.0.0:
     resolution: {integrity: sha512-du4wfLyj4yCZq1VupnVSZmRsPJsNuxoDQFdCFHLaYiEbFBD7QE0a+I4D7hOxrVnh78QE/YipFAj9lXHiXocV+Q==}
 
-  process-warning@5.0.0:
-    resolution: {integrity: sha512-a39t9ApHNx2L4+HBnQKqxxHNs1r7KF+Intd8Q/g1bUh6q0WIp9voPXJ/x0j+ZL45KF1pJd9+q2jLIRMfvEshkA==}
-
   proxy-from-env@2.1.0:
     resolution: {integrity: sha512-cJ+oHTW1VAEa8cJslgmUZrc+sjRKgAKl3Zyse6+PV38hZe/V6Z14TbCuXcan9F9ghlz4QrFr2c92TNF82UkYHA==}
     engines: {node: '>=10'}
@@ -2927,10 +2815,6 @@ packages:
 
   real-require@0.1.0:
     resolution: {integrity: sha512-r/H9MzAWtrv8aSVjPCMFpDMl5q66GqtmmRkRjpHTsp4zBAa+snZyiQNlMONiUmEJcsnaw0wCauJ2GWODr/aFkg==}
-    engines: {node: '>= 12.13.0'}
-
-  real-require@0.2.0:
-    resolution: {integrity: sha512-57frrGM/OCTLqLOAh0mhVA9VBMHd+9U7Zb2THMGdBUoZVOtGbJzjxsYGDJ3A9AYYCP4hn6y1TVbaOfzWtm5GFg==}
     engines: {node: '>= 12.13.0'}
 
   reflect.getprototypeof@1.0.10:
@@ -3033,16 +2917,6 @@ packages:
     engines: {node: '>=10'}
     hasBin: true
 
-  seroval-plugins@1.5.4:
-    resolution: {integrity: sha512-S0xQPhUTefAhNvNWFg0c1J8qJArHt5KdtJ/cFAofo06KD1MVSeFWyl4iiu+ApDIuw0WhjpOfCdgConOfAnLgkw==}
-    engines: {node: '>=10'}
-    peerDependencies:
-      seroval: ^1.0
-
-  seroval@1.5.4:
-    resolution: {integrity: sha512-46uFvgrXTVxZcUorgSSRZ4y+ieqLLQRMlG4bnCZKW3qI6BZm7Rg4ntMW4p1mILEEBZWrFlcpp0AyIIlM6jD9iw==}
-    engines: {node: '>=10'}
-
   set-function-length@1.2.2:
     resolution: {integrity: sha512-pgRc4hJ4/sNjWCSS9AmnS40x3bNMDTknHgL5UaMBTMyJnU90EgWh1Rz+MC9eFu4BuN/UwZjKQuY/1v3rM7HMfg==}
     engines: {node: '>= 0.4'}
@@ -3099,17 +2973,8 @@ packages:
     resolution: {integrity: sha512-iOBWFgUX7caIZiuutICxVgX1SdxwAVFFKwt1EvMYYec/NWO5meOJ6K5uQxhrYBdQJne4KxiqZc+KptFOWFSI9w==}
     engines: {node: '>=18'}
 
-  slow-redact@0.3.2:
-    resolution: {integrity: sha512-MseHyi2+E/hBRqdOi5COy6wZ7j7DxXRz9NkseavNYSvvWC06D8a5cidVZX3tcG5eCW3NIyVU4zT63hw0Q486jw==}
-
-  solid-js@1.9.13:
-    resolution: {integrity: sha512-6hJeJMOcEX8ktqjpDoJZEmld3ijvcvWBDtiXBm7f4332SiFN66QeAQI1REQshvyUoISsSeJ4PHDauKYbwao9JQ==}
-
   sonic-boom@2.8.0:
     resolution: {integrity: sha512-kuonw1YOYYNOve5iHdSahXPOK49GqwA+LZhI6Wz/l0rP57iKyXXIHaRagOBHAPmGwJC6od2Z9zgvZ5loSgMlVg==}
-
-  sonic-boom@4.2.1:
-    resolution: {integrity: sha512-w6AxtubXa2wTXAUsZMMWERrsIRAdrK0Sc+FUytWvYAhBJLyuI4llrMIC1DtlNSdI99EI86KZum2MMq3EAZlF9Q==}
 
   source-map-js@1.2.1:
     resolution: {integrity: sha512-UXWMKhLOwVKb728IUtQPXxfYU+usdybtUrK/8uGE8CQMvrhOpwvzDBwj0QhSL7MQc7vIsISBG8VQ8+IDQxpfQA==}
@@ -3248,9 +3113,6 @@ packages:
   thread-stream@0.15.2:
     resolution: {integrity: sha512-UkEhKIg2pD+fjkHQKyJO3yoIvAP3N6RlNFt2dUhcS1FGvCD1cQa1M/PGknCLFIyZdtJOWQjejp7bdNqmN7zwdA==}
 
-  thread-stream@3.2.0:
-    resolution: {integrity: sha512-zLBvqpwr4Esa0kRjcrzGU6zL25lePWaCLMx0RQFrmteozIfeNdaMLpG5U7PeHzvlFkAWaRKA9/KVW4F60iB+qw==}
-
   through@2.3.8:
     resolution: {integrity: sha512-w89qg7PI8wAdvX60bMDP+bFoD5Dvhm9oLheFp5O4a2QF0cSBGsBX4qZmadPMvVqlLJBBci+WqGGOAPvcDeNSVg==}
 
@@ -3346,9 +3208,6 @@ packages:
 
   uint8arrays@3.1.0:
     resolution: {integrity: sha512-ei5rfKtoRO8OyOIor2Rz5fhzjThwIHJZ3uyDPnDHTXbP0aMQ1RN/6AI5B5d9dBxJOU+BvOAk7ZQ1xphsX8Lrog==}
-
-  uint8arrays@3.1.1:
-    resolution: {integrity: sha512-+QJa8QRnbdXVpHYjLoTpJIdCTiw9Ir62nocClWuXIq2JIh4Uta0cQsTSpFL678p2CN8B+XSApwcU+pQEqVpKWg==}
 
   unbox-primitive@1.1.0:
     resolution: {integrity: sha512-nWJ91DjeOkej/TA8pXQ3myruKpKEYgqvpw9lz4OPHj/NWFNluYrjbz9j01CJ8yKQd2g4jFoOkINCTW2I5LEEyw==}
@@ -3611,8 +3470,6 @@ packages:
 
 snapshots:
 
-  '@adraffy/ens-normalize@1.11.1': {}
-
   '@airgap/beacon-blockchain-substrate@4.8.0':
     dependencies:
       '@airgap/beacon-types': 4.8.0
@@ -3663,16 +3520,6 @@ snapshots:
       - ioredis
       - uploadthing
 
-  '@airgap/beacon-core@4.1.0':
-    dependencies:
-      '@airgap/beacon-types': 4.1.0
-      '@airgap/beacon-utils': 4.1.0
-      '@stablelib/ed25519': 1.0.3
-      '@stablelib/nacl': 1.0.4
-      '@stablelib/utf8': 1.0.2
-      '@stablelib/x25519-session': 1.0.4
-      bs58check: 3.0.1
-
   '@airgap/beacon-core@4.8.0':
     dependencies:
       '@airgap/beacon-types': 4.8.0
@@ -3684,44 +3531,10 @@ snapshots:
       broadcast-channel: 7.3.0
       bs58check: 3.0.1
 
-  '@airgap/beacon-dapp@4.1.0(typescript@5.9.3)':
-    dependencies:
-      '@airgap/beacon-core': 4.1.0
-      '@airgap/beacon-transport-matrix': 4.1.0
-      '@airgap/beacon-transport-postmessage': 4.1.0
-      '@airgap/beacon-transport-walletconnect': 4.1.0(typescript@5.9.3)
-      '@airgap/beacon-ui': 4.1.0
-    transitivePeerDependencies:
-      - '@azure/app-configuration'
-      - '@azure/cosmos'
-      - '@azure/data-tables'
-      - '@azure/identity'
-      - '@azure/keyvault-secrets'
-      - '@azure/storage-blob'
-      - '@capacitor/preferences'
-      - '@deno/kv'
-      - '@netlify/blobs'
-      - '@planetscale/database'
-      - '@react-native-async-storage/async-storage'
-      - '@upstash/redis'
-      - '@vercel/blob'
-      - '@vercel/functions'
-      - '@vercel/kv'
-      - aws4fetch
-      - bufferutil
-      - db0
-      - debug
-      - ioredis
-      - supports-color
-      - typescript
-      - uploadthing
-      - utf-8-validate
-      - zod
-
   '@airgap/beacon-dapp@4.8.1':
     dependencies:
       '@airgap/beacon-core': 4.8.0
-      '@airgap/beacon-transport-matrix': 4.8.1
+      '@airgap/beacon-transport-matrix': 4.8.0
       '@airgap/beacon-transport-postmessage': 4.8.0
       '@airgap/beacon-transport-walletconnect': 4.8.0
       '@airgap/beacon-ui': 4.8.0
@@ -3757,7 +3570,7 @@ snapshots:
       '@airgap/beacon-blockchain-tezos': 4.8.0
       '@airgap/beacon-core': 4.8.0
       '@airgap/beacon-dapp': 4.8.1
-      '@airgap/beacon-transport-matrix': 4.8.1
+      '@airgap/beacon-transport-matrix': 4.8.0
       '@airgap/beacon-transport-postmessage': 4.8.0
       '@airgap/beacon-types': 4.8.0
       '@airgap/beacon-ui': 4.8.0
@@ -3788,16 +3601,7 @@ snapshots:
       - uploadthing
       - utf-8-validate
 
-  '@airgap/beacon-transport-matrix@4.1.0':
-    dependencies:
-      '@airgap/beacon-core': 4.1.0
-      '@airgap/beacon-utils': 4.1.0
-      axios: 1.17.0
-    transitivePeerDependencies:
-      - debug
-      - supports-color
-
-  '@airgap/beacon-transport-matrix@4.8.1':
+  '@airgap/beacon-transport-matrix@4.8.0':
     dependencies:
       '@airgap/beacon-core': 4.8.0
       '@airgap/beacon-utils': 4.8.0
@@ -3805,49 +3609,12 @@ snapshots:
     transitivePeerDependencies:
       - debug
       - supports-color
-
-  '@airgap/beacon-transport-postmessage@4.1.0':
-    dependencies:
-      '@airgap/beacon-core': 4.1.0
-      '@airgap/beacon-types': 4.1.0
-      '@airgap/beacon-utils': 4.1.0
 
   '@airgap/beacon-transport-postmessage@4.8.0':
     dependencies:
       '@airgap/beacon-core': 4.8.0
       '@airgap/beacon-types': 4.8.0
       '@airgap/beacon-utils': 4.8.0
-
-  '@airgap/beacon-transport-walletconnect@4.1.0(typescript@5.9.3)':
-    dependencies:
-      '@airgap/beacon-core': 4.1.0
-      '@airgap/beacon-types': 4.1.0
-      '@airgap/beacon-utils': 4.1.0
-      '@walletconnect/sign-client': 2.23.9(typescript@5.9.3)
-    transitivePeerDependencies:
-      - '@azure/app-configuration'
-      - '@azure/cosmos'
-      - '@azure/data-tables'
-      - '@azure/identity'
-      - '@azure/keyvault-secrets'
-      - '@azure/storage-blob'
-      - '@capacitor/preferences'
-      - '@deno/kv'
-      - '@netlify/blobs'
-      - '@planetscale/database'
-      - '@react-native-async-storage/async-storage'
-      - '@upstash/redis'
-      - '@vercel/blob'
-      - '@vercel/functions'
-      - '@vercel/kv'
-      - aws4fetch
-      - bufferutil
-      - db0
-      - ioredis
-      - typescript
-      - uploadthing
-      - utf-8-validate
-      - zod
 
   '@airgap/beacon-transport-walletconnect@4.8.0':
     dependencies:
@@ -3879,22 +3646,9 @@ snapshots:
       - uploadthing
       - utf-8-validate
 
-  '@airgap/beacon-types@4.1.0':
-    dependencies:
-      '@types/chrome': 0.0.246
-
   '@airgap/beacon-types@4.8.0':
     dependencies:
       '@types/chrome': 0.0.315
-
-  '@airgap/beacon-ui@4.1.0':
-    dependencies:
-      '@airgap/beacon-core': 4.1.0
-      '@airgap/beacon-transport-postmessage': 4.1.0
-      '@airgap/beacon-types': 4.1.0
-      '@airgap/beacon-utils': 4.1.0
-      qrcode-svg: 1.1.0
-      solid-js: 1.9.13
 
   '@airgap/beacon-ui@4.8.0':
     dependencies:
@@ -3927,14 +3681,6 @@ snapshots:
       - ioredis
       - uploadthing
 
-  '@airgap/beacon-utils@4.1.0':
-    dependencies:
-      '@stablelib/ed25519': 1.0.3
-      '@stablelib/nacl': 1.0.4
-      '@stablelib/random': 1.0.2
-      '@stablelib/utf8': 1.0.2
-      bs58check: 3.0.1
-
   '@airgap/beacon-utils@4.8.0':
     dependencies:
       '@stablelib/ed25519': 2.1.0
@@ -3946,7 +3692,7 @@ snapshots:
   '@airgap/beacon-wallet@4.8.1':
     dependencies:
       '@airgap/beacon-core': 4.8.0
-      '@airgap/beacon-transport-matrix': 4.8.1
+      '@airgap/beacon-transport-matrix': 4.8.0
       '@airgap/beacon-transport-postmessage': 4.8.0
     transitivePeerDependencies:
       - debug
@@ -4303,8 +4049,6 @@ snapshots:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.5
 
-  '@msgpack/msgpack@3.1.3': {}
-
   '@napi-rs/wasm-runtime@1.1.4(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0)':
     dependencies:
       '@emnapi/core': 1.10.0
@@ -4343,8 +4087,6 @@ snapshots:
 
   '@noble/ciphers@1.2.1': {}
 
-  '@noble/ciphers@1.3.0': {}
-
   '@noble/curves@1.8.0':
     dependencies:
       '@noble/hashes': 1.7.0
@@ -4352,14 +4094,6 @@ snapshots:
   '@noble/curves@1.8.1':
     dependencies:
       '@noble/hashes': 1.7.1
-
-  '@noble/curves@1.9.1':
-    dependencies:
-      '@noble/hashes': 1.8.0
-
-  '@noble/curves@1.9.7':
-    dependencies:
-      '@noble/hashes': 1.8.0
 
   '@noble/hashes@1.7.0': {}
 
@@ -4457,19 +4191,6 @@ snapshots:
     optional: true
 
   '@rtsao/scc@1.1.0': {}
-
-  '@scure/base@1.2.6': {}
-
-  '@scure/bip32@1.7.0':
-    dependencies:
-      '@noble/curves': 1.9.7
-      '@noble/hashes': 1.8.0
-      '@scure/base': 1.2.6
-
-  '@scure/bip39@1.6.0':
-    dependencies:
-      '@noble/hashes': 1.8.0
-      '@scure/base': 1.2.6
 
   '@sinclair/typebox@0.27.10': {}
 
@@ -4602,21 +4323,11 @@ snapshots:
       '@stablelib/hash': 2.0.0
       '@stablelib/wipe': 2.0.1
 
-  '@stablelib/utf8@1.0.2': {}
-
   '@stablelib/utf8@2.1.0': {}
 
   '@stablelib/wipe@1.0.1': {}
 
   '@stablelib/wipe@2.0.1': {}
-
-  '@stablelib/x25519-session@1.0.4':
-    dependencies:
-      '@stablelib/blake2b': 1.0.1
-      '@stablelib/keyagreement': 1.0.1
-      '@stablelib/random': 1.0.2
-      '@stablelib/wipe': 1.0.1
-      '@stablelib/x25519': 1.0.3
 
   '@stablelib/x25519-session@2.0.1':
     dependencies:
@@ -4664,9 +4375,9 @@ snapshots:
       '@tanstack/query-core': 5.101.0
       react: 18.3.1
 
-  '@taquito/beacon-wallet@17.5.2(typescript@5.9.3)':
+  '@taquito/beacon-wallet@17.5.2':
     dependencies:
-      '@airgap/beacon-dapp': 4.1.0(typescript@5.9.3)
+      '@airgap/beacon-dapp': 4.8.1
       '@taquito/core': 17.5.2
       '@taquito/taquito': 17.5.2
     transitivePeerDependencies:
@@ -4692,10 +4403,8 @@ snapshots:
       - encoding
       - ioredis
       - supports-color
-      - typescript
       - uploadthing
       - utf-8-validate
-      - zod
 
   '@taquito/core@17.5.2':
     dependencies:
@@ -4795,11 +4504,6 @@ snapshots:
   '@types/bs58check@2.1.2':
     dependencies:
       '@types/node': 20.19.42
-
-  '@types/chrome@0.0.246':
-    dependencies:
-      '@types/filesystem': 0.0.36
-      '@types/har-format': 1.2.16
 
   '@types/chrome@0.0.315':
     dependencies:
@@ -5071,50 +4775,6 @@ snapshots:
       - uploadthing
       - utf-8-validate
 
-  '@walletconnect/core@2.23.9(typescript@5.9.3)':
-    dependencies:
-      '@walletconnect/heartbeat': 1.2.2
-      '@walletconnect/jsonrpc-provider': 1.0.14
-      '@walletconnect/jsonrpc-types': 1.0.4
-      '@walletconnect/jsonrpc-utils': 1.0.8
-      '@walletconnect/jsonrpc-ws-connection': 1.0.16
-      '@walletconnect/keyvaluestorage': 1.1.1
-      '@walletconnect/logger': 3.0.2
-      '@walletconnect/relay-api': 1.0.11
-      '@walletconnect/relay-auth': 1.1.0
-      '@walletconnect/safe-json': 1.0.2
-      '@walletconnect/time': 1.0.2
-      '@walletconnect/types': 2.23.9
-      '@walletconnect/utils': 2.23.9(typescript@5.9.3)
-      '@walletconnect/window-getters': 1.0.1
-      es-toolkit: 1.44.0
-      events: 3.3.0
-      uint8arrays: 3.1.1
-    transitivePeerDependencies:
-      - '@azure/app-configuration'
-      - '@azure/cosmos'
-      - '@azure/data-tables'
-      - '@azure/identity'
-      - '@azure/keyvault-secrets'
-      - '@azure/storage-blob'
-      - '@capacitor/preferences'
-      - '@deno/kv'
-      - '@netlify/blobs'
-      - '@planetscale/database'
-      - '@react-native-async-storage/async-storage'
-      - '@upstash/redis'
-      - '@vercel/blob'
-      - '@vercel/functions'
-      - '@vercel/kv'
-      - aws4fetch
-      - bufferutil
-      - db0
-      - ioredis
-      - typescript
-      - uploadthing
-      - utf-8-validate
-      - zod
-
   '@walletconnect/environment@1.0.1':
     dependencies:
       tslib: 1.14.1
@@ -5187,11 +4847,6 @@ snapshots:
       '@walletconnect/safe-json': 1.0.2
       pino: 7.11.0
 
-  '@walletconnect/logger@3.0.2':
-    dependencies:
-      '@walletconnect/safe-json': 1.0.2
-      pino: 10.0.0
-
   '@walletconnect/relay-api@1.0.11':
     dependencies:
       '@walletconnect/jsonrpc-types': 1.0.4
@@ -5242,42 +4897,6 @@ snapshots:
       - uploadthing
       - utf-8-validate
 
-  '@walletconnect/sign-client@2.23.9(typescript@5.9.3)':
-    dependencies:
-      '@walletconnect/core': 2.23.9(typescript@5.9.3)
-      '@walletconnect/events': 1.0.1
-      '@walletconnect/heartbeat': 1.2.2
-      '@walletconnect/jsonrpc-utils': 1.0.8
-      '@walletconnect/logger': 3.0.2
-      '@walletconnect/time': 1.0.2
-      '@walletconnect/types': 2.23.9
-      '@walletconnect/utils': 2.23.9(typescript@5.9.3)
-      events: 3.3.0
-    transitivePeerDependencies:
-      - '@azure/app-configuration'
-      - '@azure/cosmos'
-      - '@azure/data-tables'
-      - '@azure/identity'
-      - '@azure/keyvault-secrets'
-      - '@azure/storage-blob'
-      - '@capacitor/preferences'
-      - '@deno/kv'
-      - '@netlify/blobs'
-      - '@planetscale/database'
-      - '@react-native-async-storage/async-storage'
-      - '@upstash/redis'
-      - '@vercel/blob'
-      - '@vercel/functions'
-      - '@vercel/kv'
-      - aws4fetch
-      - bufferutil
-      - db0
-      - ioredis
-      - typescript
-      - uploadthing
-      - utf-8-validate
-      - zod
-
   '@walletconnect/time@1.0.2':
     dependencies:
       tslib: 1.14.1
@@ -5289,35 +4908,6 @@ snapshots:
       '@walletconnect/jsonrpc-types': 1.0.4
       '@walletconnect/keyvaluestorage': 1.1.1
       '@walletconnect/logger': 2.1.2
-      events: 3.3.0
-    transitivePeerDependencies:
-      - '@azure/app-configuration'
-      - '@azure/cosmos'
-      - '@azure/data-tables'
-      - '@azure/identity'
-      - '@azure/keyvault-secrets'
-      - '@azure/storage-blob'
-      - '@capacitor/preferences'
-      - '@deno/kv'
-      - '@netlify/blobs'
-      - '@planetscale/database'
-      - '@react-native-async-storage/async-storage'
-      - '@upstash/redis'
-      - '@vercel/blob'
-      - '@vercel/functions'
-      - '@vercel/kv'
-      - aws4fetch
-      - db0
-      - ioredis
-      - uploadthing
-
-  '@walletconnect/types@2.23.9':
-    dependencies:
-      '@walletconnect/events': 1.0.1
-      '@walletconnect/heartbeat': 1.2.2
-      '@walletconnect/jsonrpc-types': 1.0.4
-      '@walletconnect/keyvaluestorage': 1.1.1
-      '@walletconnect/logger': 3.0.2
       events: 3.3.0
     transitivePeerDependencies:
       - '@azure/app-configuration'
@@ -5380,50 +4970,6 @@ snapshots:
       - ioredis
       - uploadthing
 
-  '@walletconnect/utils@2.23.9(typescript@5.9.3)':
-    dependencies:
-      '@msgpack/msgpack': 3.1.3
-      '@noble/ciphers': 1.3.0
-      '@noble/curves': 1.9.7
-      '@noble/hashes': 1.8.0
-      '@scure/base': 1.2.6
-      '@walletconnect/jsonrpc-utils': 1.0.8
-      '@walletconnect/keyvaluestorage': 1.1.1
-      '@walletconnect/logger': 3.0.2
-      '@walletconnect/relay-api': 1.0.11
-      '@walletconnect/relay-auth': 1.1.0
-      '@walletconnect/safe-json': 1.0.2
-      '@walletconnect/time': 1.0.2
-      '@walletconnect/types': 2.23.9
-      '@walletconnect/window-getters': 1.0.1
-      '@walletconnect/window-metadata': 1.0.1
-      blakejs: 1.2.1
-      detect-browser: 5.3.0
-      ox: 0.9.3(typescript@5.9.3)
-      uint8arrays: 3.1.1
-    transitivePeerDependencies:
-      - '@azure/app-configuration'
-      - '@azure/cosmos'
-      - '@azure/data-tables'
-      - '@azure/identity'
-      - '@azure/keyvault-secrets'
-      - '@azure/storage-blob'
-      - '@capacitor/preferences'
-      - '@deno/kv'
-      - '@netlify/blobs'
-      - '@planetscale/database'
-      - '@react-native-async-storage/async-storage'
-      - '@upstash/redis'
-      - '@vercel/blob'
-      - '@vercel/functions'
-      - '@vercel/kv'
-      - aws4fetch
-      - db0
-      - ioredis
-      - typescript
-      - uploadthing
-      - zod
-
   '@walletconnect/window-getters@1.0.1':
     dependencies:
       tslib: 1.14.1
@@ -5437,10 +4983,6 @@ snapshots:
     dependencies:
       jsonparse: 1.3.1
       through: 2.3.8
-
-  abitype@1.2.4(typescript@5.9.3):
-    optionalDependencies:
-      typescript: 5.9.3
 
   acorn-jsx@5.3.2(acorn@8.16.0):
     dependencies:
@@ -6034,8 +5576,6 @@ snapshots:
       is-date-object: 1.1.0
       is-symbol: 1.1.1
 
-  es-toolkit@1.44.0: {}
-
   esbuild@0.21.5:
     optionalDependencies:
       '@esbuild/aix-ppc64': 0.21.5
@@ -6245,8 +5785,6 @@ snapshots:
   esutils@2.0.3: {}
 
   eventemitter3@4.0.7: {}
-
-  eventemitter3@5.0.1: {}
 
   eventemitter3@5.0.4: {}
 
@@ -6943,8 +6481,6 @@ snapshots:
 
   on-exit-leak-free@0.2.0: {}
 
-  on-exit-leak-free@2.1.2: {}
-
   once@1.4.0:
     dependencies:
       wrappy: 1.0.2
@@ -6971,21 +6507,6 @@ snapshots:
       get-intrinsic: 1.3.0
       object-keys: 1.1.1
       safe-push-apply: 1.0.0
-
-  ox@0.9.3(typescript@5.9.3):
-    dependencies:
-      '@adraffy/ens-normalize': 1.11.1
-      '@noble/ciphers': 1.3.0
-      '@noble/curves': 1.9.1
-      '@noble/hashes': 1.8.0
-      '@scure/bip32': 1.7.0
-      '@scure/bip39': 1.6.0
-      abitype: 1.2.4(typescript@5.9.3)
-      eventemitter3: 5.0.1
-    optionalDependencies:
-      typescript: 5.9.3
-    transitivePeerDependencies:
-      - zod
 
   p-finally@1.0.0: {}
 
@@ -7069,27 +6590,7 @@ snapshots:
       duplexify: 4.1.3
       split2: 4.2.0
 
-  pino-abstract-transport@2.0.0:
-    dependencies:
-      split2: 4.2.0
-
   pino-std-serializers@4.0.0: {}
-
-  pino-std-serializers@7.1.0: {}
-
-  pino@10.0.0:
-    dependencies:
-      atomic-sleep: 1.0.0
-      on-exit-leak-free: 2.1.2
-      pino-abstract-transport: 2.0.0
-      pino-std-serializers: 7.1.0
-      process-warning: 5.0.0
-      quick-format-unescaped: 4.0.4
-      real-require: 0.2.0
-      safe-stable-stringify: 2.5.0
-      slow-redact: 0.3.2
-      sonic-boom: 4.2.1
-      thread-stream: 3.2.0
 
   pino@7.11.0:
     dependencies:
@@ -7173,8 +6674,6 @@ snapshots:
 
   process-warning@1.0.0: {}
 
-  process-warning@5.0.0: {}
-
   proxy-from-env@2.1.0: {}
 
   punycode@2.3.1: {}
@@ -7240,8 +6739,6 @@ snapshots:
   readdirp@5.0.0: {}
 
   real-require@0.1.0: {}
-
-  real-require@0.2.0: {}
 
   reflect.getprototypeof@1.0.10:
     dependencies:
@@ -7377,12 +6874,6 @@ snapshots:
 
   semver@7.8.2: {}
 
-  seroval-plugins@1.5.4(seroval@1.5.4):
-    dependencies:
-      seroval: 1.5.4
-
-  seroval@1.5.4: {}
-
   set-function-length@1.2.2:
     dependencies:
       define-data-property: 1.1.4
@@ -7459,19 +6950,7 @@ snapshots:
       ansi-styles: 6.2.3
       is-fullwidth-code-point: 5.1.0
 
-  slow-redact@0.3.2: {}
-
-  solid-js@1.9.13:
-    dependencies:
-      csstype: 3.2.3
-      seroval: 1.5.4
-      seroval-plugins: 1.5.4(seroval@1.5.4)
-
   sonic-boom@2.8.0:
-    dependencies:
-      atomic-sleep: 1.0.0
-
-  sonic-boom@4.2.1:
     dependencies:
       atomic-sleep: 1.0.0
 
@@ -7627,10 +7106,6 @@ snapshots:
     dependencies:
       real-require: 0.1.0
 
-  thread-stream@3.2.0:
-    dependencies:
-      real-require: 0.2.0
-
   through@2.3.8: {}
 
   tinybench@2.9.0: {}
@@ -7732,10 +7207,6 @@ snapshots:
   ufo@1.6.4: {}
 
   uint8arrays@3.1.0:
-    dependencies:
-      multiformats: 9.9.0
-
-  uint8arrays@3.1.1:
     dependencies:
       multiformats: 9.9.0
 
