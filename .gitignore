@@ -53,3 +53,7 @@ octez-data/
 
 # Secret scan
 .gitleaks-report.json
+
+# Node compile cache (Node 22+)
+**/node-compile-cache/
+**/.cache/
