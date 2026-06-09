@@ -1,11 +1,9 @@
 /**
  * GalataBaker API — Users module.
  *
- * Tek modül, tek controller, tek service. UsersService @Global değil
- * — burada register edilir. (Başka modüller de lazım olursa export
- * ederiz — şu an DelegationsModule kendi içinde users kullanacak.)
+ * Sorumluluk: User CRUD + verification + preferences + consent + delete.
+ * Auth: @Global() değil ama UsersService başka modüller tarafından kullanılır.
  */
-
 import { Module } from '@nestjs/common';
 
 import { UsersController } from './users.controller.js';

@@ -11,12 +11,15 @@
  * afterEach'te temizlenir.
  */
 
+import { ConfigModule } from '@nestjs/config';
 import { FastifyAdapter, type NestFastifyApplication } from '@nestjs/platform-fastify';
 import { Test } from '@nestjs/testing';
 import supertest from 'supertest';
 import { afterAll, afterEach, beforeAll, describe, expect, it } from 'vitest';
 
+import { AuthModule } from '../auth/auth.module.js';
 import { ZodValidationPipe } from '../common/zod-validation.pipe.js';
+import { PrismaModule } from '../prisma/prisma.module.js';
 import { PrismaService } from '../prisma/prisma.service.js';
 
 import { UsersController } from './users.controller.js';
@@ -46,8 +49,12 @@ describe('UsersController (HTTP)', () => {
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
       controllers: [UsersController],
-      providers: [UsersService, PrismaService],
-    }).compile();
+      imports: [ConfigModule.forRoot({ isGlobal: true }), AuthModule, PrismaModule],
+      providers: [UsersService],
+    })
+      .overrideGuard('JwtAuthGuard')
+      .useValue({ canActivate: () => true })
+      .compile();
 
     app = moduleRef.createNestApplication<NestFastifyApplication>(
       new FastifyAdapter({ logger: false }),

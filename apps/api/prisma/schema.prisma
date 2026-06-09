@@ -46,9 +46,14 @@ model User {
   id             String   @id @default(cuid())
   walletPkh      String   @unique
   email          String?  @unique
+  emailVerified  Boolean  @default(false)
   telegramChatId String?  @unique
+  telegramVerified Boolean @default(false)
   role           UserRole @default(USER)
   preferences    Json?
+  // KVKK / GDPR consent — email/telegram toplamadan önce onay şart
+  consentGivenAt DateTime?
+  consentVersion String?
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
 

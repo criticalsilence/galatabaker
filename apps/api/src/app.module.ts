@@ -1,41 +1,38 @@
+/**
+ * GalataBaker API — App module (root).
+ *
+ * 7 modül + Config + Schedule + Throttler + Auth.
+ * Sıra önemli: terminal modüllerin hepsi import edilir, Auth @Global.
+ */
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { ScheduleModule } from '@nestjs/schedule';
 
+import { AuthModule } from './auth/auth.module.js';
 import { BakersModule } from './bakers/bakers.module.js';
+import { ThrottlerConfigModule } from './common/throttler.config.js';
 import { DelegationsModule } from './delegations/delegations.module.js';
 import { EmailModule } from './email/email.module.js';
 import { HealthModule } from './health/health.module.js';
 import { PrismaModule } from './prisma/prisma.module.js';
 import { RewardsModule } from './rewards/rewards.module.js';
+import { TelegramModule } from './telegram/telegram.module.js';
 import { UsersModule } from './users/users.module.js';
 
-/**
- * Root AppModule.
- *
- * Şu an:
- *   - ConfigModule.forRoot() — env loader (.env → process.env)
- *   - HealthModule — liveness
- *   - PrismaModule — DB
- *   - ScheduleModule — cron (RewardsScheduler)
- *   - BakersModule, UsersModule, DelegationsModule, RewardsModule — REST API
- *   - EmailModule — provider facade (Noop / MailHog / Resend)
- * Sonraki: NotificationsModule (Task 8).
- *
- * ConfigModule.forRoot() isGlobal: true yapıyoruz — alt modüller (Email)
- * ConfigService'i import etmeden inject edebiliyor.
- */
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
-    PrismaModule,
-    HealthModule,
     ScheduleModule.forRoot(),
+    ThrottlerConfigModule,
+    PrismaModule,
+    AuthModule, // @Global — JWT, AUTH_CONFIG, JwtAuthGuard
     BakersModule,
-    UsersModule,
     DelegationsModule,
     RewardsModule,
     EmailModule,
+    HealthModule,
+    UsersModule,
+    TelegramModule,
   ],
 })
 export class AppModule {}
