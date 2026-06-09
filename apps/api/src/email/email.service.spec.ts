@@ -20,7 +20,12 @@ import { BadRequestException, Logger } from '@nestjs/common';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { EmailService } from './email.service.js';
-import type { EmailProviderHealth, EmailSendOptions, EmailSendResult } from './email.types.js';
+import type {
+  EmailConfig,
+  EmailProviderHealth,
+  EmailSendOptions,
+  EmailSendResult,
+} from './email.types.js';
 import type { EmailProvider } from './providers/email-provider.abstract.js';
 
 // Mock provider — interface'i karşılayan minimal object
@@ -36,7 +41,8 @@ function makeMockProvider(): {
   };
 }
 
-const mockConfig = {
+const mockConfig: EmailConfig = {
+  provider: 'noop',
   fromAddress: 'noreply@galatabaker.io',
   fromName: 'GalataBaker',
 };
