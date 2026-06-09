@@ -29,6 +29,7 @@ export default defineConfig({
     include: ['src/**/*.spec.ts', 'test/**/*.e2e.spec.ts'],
     globals: false,
     pool: 'forks', // NestJS yavaş açılıyor, paralel test'lerde memory basıncını azaltır
+    fileParallelism: false, // Tek DB paylaşılıyor — dosyalar arası paralellik race condition yaratır
     testTimeout: 10000,
   },
   resolve: {

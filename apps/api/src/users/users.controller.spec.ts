@@ -3,6 +3,12 @@
  *
  * Full HTTP chain: supertest → NestJS → Controller → Service → Prisma.
  * No mocking — real DB, real validation, real serialization.
+ *
+ * PII isolation: email ve telegramChatId test değerleri RUN-ize edilmiş
+ * (testEmail / TEST_TELEGRAM_ID helper'ları). Sebep: sabit değerler
+ * (find@me.com, 1234567890) unique constraint'i tetiklerdi paralel
+ * run'larda. RUN içeren tüm değerler `contains: RUN` filtresiyle
+ * afterEach'te temizlenir.
  */
 
 import { FastifyAdapter, type NestFastifyApplication } from '@nestjs/platform-fastify';
@@ -23,6 +29,15 @@ const B58 = /[^a-km-zA-HJ-NP-Z1-9]/g;
 function validPkh(suffix: string): string {
   return `tz1${RUN}${suffix}`.replace(B58, 'a').padEnd(36, 'a').slice(0, 36);
 }
+
+// PII helpers — RUN-ize edilmiş unique test verileri
+function testEmail(local: string, domain = 'example.com'): string {
+  return `${local}+${RUN}@${domain}`;
+}
+// Telegram chat id'ler DTO'da numeric (zod). RUN-ize etmek için
+// Date.now()'ın son 5 hanesini prefix olarak kullan — her run farklı
+// numeric değer, ama son 5 hane "67890" sabit (mask test'i için).
+const TEST_TELEGRAM_ID = `${Date.now().toString().slice(-5)}67890`; // 10 hane numeric
 
 describe('UsersController (HTTP)', () => {
   let app: NestFastifyApplication;
@@ -50,7 +65,11 @@ describe('UsersController (HTTP)', () => {
     const prisma = app.get(PrismaService);
     await prisma.user.deleteMany({
       where: {
-        OR: [{ walletPkh: { contains: `tz1${RUN}` } }, { email: { contains: RUN } }],
+        OR: [
+          { walletPkh: { contains: `tz1${RUN}` } },
+          { email: { contains: RUN } },
+          { telegramChatId: { contains: RUN } },
+        ],
       },
     });
   });
@@ -82,7 +101,7 @@ describe('UsersController (HTTP)', () => {
       const pkh = validPkh('em');
       const res = await request.post('/api/users/register').send({
         walletPkh: pkh,
-        email: 'MixedCase@Example.COM',
+        email: testEmail('mixed').toUpperCase(),
       });
       expect(res.status).toBeLessThan(300);
       expect(res.body.emailMasked).toBe('m***@example.com');
@@ -111,11 +130,12 @@ describe('UsersController (HTTP)', () => {
   describe('GET /api/users/:walletPkh', () => {
     it('returns 200 with masked user data when found', async () => {
       const pkh = validPkh('get');
-      await request.post('/api/users/register').send({
+      const postRes = await request.post('/api/users/register').send({
         walletPkh: pkh,
-        email: 'find@me.com',
-        telegramChatId: '1234567890',
+        email: testEmail('find', 'me.com'),
+        telegramChatId: TEST_TELEGRAM_ID,
       });
+      expect([200, 201]).toContain(postRes.status);
 
       const res = await request.get(`/api/users/${pkh}`);
       expect(res.status).toBe(200);

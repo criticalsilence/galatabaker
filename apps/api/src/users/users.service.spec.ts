@@ -3,6 +3,13 @@
  *
  * Test verisi: real Postgres test DB, RUN prefix ile izole.
  * Cleanup: afterEach ile RUN prefix'li tüm user'ları sil.
+ *
+ * PII isolation: email ve telegramChatId test değerleri RUN-ize edilmiş
+ * (testEmail / TEST_TELEGRAM_ID helper'ları). Sebep: sabit değerler
+ * (alice@example.com, 1234567890) `email` ve `telegramChatId` unique
+ * constraint'lerini tetiklerdi — önceki run'dan kalan kayıtlar
+ * ikinci run'da P2002 unique violation fırlatıyordu. RUN içeren tüm
+ * değerler `email: { contains: RUN }` filtresiyle yakalanır ve silinir.
  */
 
 import { afterEach, describe, expect, it } from 'vitest';
@@ -24,12 +31,26 @@ function validPkh(suffix: string): string {
   return `tz1${RUN}${suffix}`.replace(B58, 'a').padEnd(36, 'a').slice(0, 36);
 }
 
+// PII helpers — RUN-ize edilmiş unique test verileri.
+// Sabit değerler unique constraint'i tetikler, RUN ile her run farklı olur.
+function testEmail(local: string, domain = 'example.com'): string {
+  return `${local}+${RUN}@${domain}`;
+}
+// Telegram chat id'ler DTO'da numeric (zod). RUN-ize etmek için
+// Date.now()'ın son 5 hanesini prefix olarak kullan — her run farklı
+// numeric değer, ama son 5 hane "67890" sabit (mask test'i için).
+const TEST_TELEGRAM_ID = `${Date.now().toString().slice(-5)}67890`; // 10 hane numeric
+
 describe('UsersService', () => {
   afterEach(async () => {
-    // Test user'larımızı sil (walletPkh veya email RUN içeriyor)
+    // Test user'larımızı sil (walletPkh, email veya telegramChatId RUN içeriyor)
     await prisma.user.deleteMany({
       where: {
-        OR: [{ walletPkh: { contains: `tz1${RUN}` } }, { email: { contains: RUN } }],
+        OR: [
+          { walletPkh: { contains: `tz1${RUN}` } },
+          { email: { contains: RUN } },
+          { telegramChatId: { contains: RUN } },
+        ],
       },
     });
   });
@@ -59,8 +80,9 @@ describe('UsersService', () => {
 
     it('updates email on second register (idempotent upsert)', async () => {
       const pkh = validPkh('upd');
-      await service.register({ walletPkh: pkh, email: 'alice@example.com' });
-      const updated = await service.register({ walletPkh: pkh, email: 'ALICE@EXAMPLE.COM' });
+      const email = testEmail('alice');
+      await service.register({ walletPkh: pkh, email });
+      const updated = await service.register({ walletPkh: pkh, email: email.toUpperCase() });
 
       // Email lowercase normalize edildi
       expect(updated.emailMasked).toBe('a***@example.com');
@@ -68,7 +90,7 @@ describe('UsersService', () => {
 
     it('preserves existing email when not provided in second call', async () => {
       const pkh = validPkh('pres');
-      await service.register({ walletPkh: pkh, email: 'bob@example.com' });
+      await service.register({ walletPkh: pkh, email: testEmail('bob') });
       // İkinci çağrıda email yok — eskisi kalmalı
       const user = await service.register({ walletPkh: pkh });
       expect(user.emailMasked).toBe('b***@example.com');
@@ -76,7 +98,7 @@ describe('UsersService', () => {
 
     it('masks telegram chat id keeping last 5 digits', async () => {
       const pkh = validPkh('tg');
-      const user = await service.register({ walletPkh: pkh, telegramChatId: '1234567890' });
+      const user = await service.register({ walletPkh: pkh, telegramChatId: TEST_TELEGRAM_ID });
       expect(user.telegramChatIdMasked).toBe('*****67890');
     });
   });
@@ -84,7 +106,7 @@ describe('UsersService', () => {
   describe('findByPkh()', () => {
     it('returns user with masked PII when found', async () => {
       const pkh = validPkh('find');
-      await service.register({ walletPkh: pkh, email: 'carol@test.org' });
+      await service.register({ walletPkh: pkh, email: testEmail('carol', 'test.org') });
       const user = await service.findByPkh(pkh);
 
       expect(user.walletPkh).toBe(pkh);
