@@ -17,6 +17,11 @@ export default [
       '**/*.config.mjs',
       '**/*.config.cjs',
       '**/*.config.ts',
+      // Standalone CLI scripts (siww-e2e.mjs, e2e-full.mjs, manual debug) — not part
+      // of build, use Node 22 globals (fetch, console, process) not allowed in app code.
+      '**/siww-e2e.mjs',
+      '**/e2e-full.mjs',
+      '**/debug-*.mjs',
     ],
   },
   js.configs.recommended,

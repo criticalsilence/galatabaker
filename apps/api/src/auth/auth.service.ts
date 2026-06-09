@@ -2,46 +2,71 @@
  * GalataBaker API — Auth service.
  *
  * SIWW (Sign-In With Wallet) doğrulama akışı:
- *   1. Client GET /api/auth/challenge → ChallengeService.create()
- *   2. Client message'ı cüzdanla imzalar (Temple/Kukai)
- *   3. Client POST /api/auth/verify { walletPkh, publicKey, signature, nonce, timestamp }
+ *   1. Client GET  /api/auth/challenge  → ChallengeService.create()
+ *   2. Client message'ı cüzdanla imzalar (Temple / Kukai)
+ *   3. Client POST /api/auth/verify    → { walletPkh, publicKey, signature, nonce, timestamp }
  *   4. Server:
- *      a. ChallengeService.consume(nonce) — replay koruması
- *      b. Timestamp skew kontrolü
+ *      a. ChallengeService.consume(nonce)         — replay koruması (tek kullanımlık)
+ *      b. Timestamp skew kontrolü (±5 dk)
  *      c. Canonical message'ı yeniden kur
- *      d. Tezos ed25519 signature verify (watermark ile)
- *      e. walletPkh ↔ publicKey derivation match
+ *      d. Tezos ed25519 signature verify           — TZIP-32 format
+ *      e. walletPkh ↔ publicKey derivation match   — getPkhfromPk()
  *      f. User upsert (idempotent)
  *      g. JWT sign + return
  *
- * Tezos ed25519 signed message format (TZIP-XXX):
- *   magic: 0x01 0x09 "Tezos Signed Message:\n"  (24 bytes)
- *   message_length: 4 bytes big-endian
- *   message: UTF-8 bytes
- *   public_key: 32 bytes
+ * ── Tezos SIWW signed payload formatı (TZIP-32) ─────────────────────────
+ *   Cüzdan şu payload'ın blake2b-256 hash'ini imzalar:
  *
- * Public key → tz1 address:
- *   1. blake2b(publicKey, 20 bytes)
- *   2. prepend 0x00 0x01 0xa7 (tz1 prefix)
- *   3. base58check encode
+ *     ┌─────────────────────────────────────────────────────────────┐
+ *     │ 0x01  (1 byte — "generic signed message" magic)             │
+ *     │ "Tezos Signed Message:\n"  (24 bytes — UTF-8)               │
+ *     │ msgLen  (4 bytes — big-endian UTF-8 message length)         │
+ *     │ message (N bytes — UTF-8 canonical message)                 │
+ *     │ publicKey (32 bytes — ed25519 raw pubkey)                   │
+ *     └─────────────────────────────────────────────────────────────┘
  *
- * Not: apps/web shared packages/sdk'te Beacon SDK kullanıyor. apps/api
- * burada bağımsız implementasyon yaptı — çünkü Beacon SDK 4.x'in
- * gerekli fonksiyonları export edilmiyor. Üretimde packages/sdk'e
- * taşımak mantıklı olabilir (DRY).
+ *   - Toplam 61 + N bytes
+ *   - ed25519 imzası bu payload'ın **blake2b-256** hash'i üzerine atılır
+ *     (Tezos custom — RFC 8032 SHA-512 değil)
+ *   - @taquito/utils'ın `verifySignature()`'ı bu blake2b + prefix check +
+ *     curve dispatch'i kendisi yapıyor; burada sadece payload'ı kuruyoruz.
+ *
+ * ── Public key → Tezos address (tz1, ed25519) ─────────────────────────
+ *   Resmi Taquito `getPkhfromPk()` fonksiyonu:
+ *     1. Public key base58 decode (prefix otomatik validate)
+ *     2. blake2b(pubkey, 20)
+ *     3. b58Encode(hash, PrefixV2.Ed25519PublicKeyHash)
+ *        → 3-byte prefix: [0x06, 0xa1, 0x9f]
+ *
+ *   ──────────────────────────────────────────────────────────────────
+ *   NOT (DRY): apps/web shared `packages/sdk`'te Beacon SDK kullanıyor.
+ *   apps/api burada bağımsız implementasyon yaptı çünkü Beacon SDK 4.x
+ *   `getPkhfromPk` / `verifySignature` fonksiyonlarını export etmiyor.
+ *   Adım 8'de `@galatabaker/crypto-utils` paketi çıkarıp her iki tarafın
+ *   da kullanması hedefleniyor.
  */
 import { Inject, Injectable, Logger, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { ed25519 } from '@noble/curves/ed25519.js';
-import { blake2b } from '@noble/hashes/blake2.js';
-import { utf8ToBytes, concatBytes } from '@noble/hashes/utils.js';
-import bs58check from 'bs58check';
+import { concatBytes, utf8ToBytes } from '@noble/hashes/utils.js';
+import { b58DecodeAndCheckPrefix, getPkhfromPk, PrefixV2, verifySignature } from '@taquito/utils';
 
 import { PrismaService } from '../prisma/prisma.service.js';
 
 import { AUTH_CONFIG, type AuthConfig } from './auth.config.js';
 import type { JWTPayload, SIWWInput, SIWWResult } from './auth.types.js';
 import { ChallengeService } from './challenge.service.js';
+
+/**
+ * Tezos SIWW watermark (TZIP-32 "generic signed message"):
+ *   0x01 magic + "Tezos Signed Message:\n" string. Toplam 25 bytes.
+ *
+ * Toplam signed payload: watermark(25) + msgLen(4) + msg(N) + pubkey(32)
+ *                       = 61 + N bytes
+ */
+const TEZOS_WATERMARK: Uint8Array = concatBytes(
+  new Uint8Array([0x01]),
+  utf8ToBytes('Tezos Signed Message:\n'),
+);
 
 @Injectable()
 export class AuthService {
@@ -54,8 +79,12 @@ export class AuthService {
     private readonly jwt: JwtService,
   ) {}
 
+  /**
+   * Full SIWW verify pipeline. Bütün adımlar sırayla:
+   *   nonce consume → timestamp skew → signature → pkh derivation → upsert → JWT
+   */
   async verifyAndConnect(input: SIWWInput): Promise<SIWWResult> {
-    // 1. Challenge tek kullanımlık kontrolü
+    // 1. Challenge tek-kullanımlık kontrolü (replay protection)
     if (!this.challenges.consume(input.nonce)) {
       throw new UnauthorizedException('Invalid or expired nonce');
     }
@@ -66,13 +95,13 @@ export class AuthService {
       throw new UnauthorizedException('Timestamp out of acceptable range');
     }
 
-    // 3. Canonical message'ı yeniden kur
+    // 3. Canonical message'ı yeniden kur (client ile aynı format)
     const message = this.buildCanonicalMessage(input.nonce, input.timestamp);
 
-    // 4. Signature verify
+    // 4. Tezos ed25519 signature verify (TZIP-32 format, blake2b-256 + ed25519)
     let isValid = false;
     try {
-      isValid = this.verifyTezosEd25519Signature(input.publicKey, input.signature, message);
+      isValid = this.verifyTezosSignedMessage(input.publicKey, input.signature, message);
     } catch (err) {
       this.logger.warn(`[auth] signature verify error: ${(err as Error).message}`);
       throw new UnauthorizedException('Invalid signature format');
@@ -84,13 +113,14 @@ export class AuthService {
     }
 
     // 5. walletPkh ↔ publicKey derivation match
+    //    (client'ın iddia ettiği adres, public key'den türetilenle aynı mı?)
     const derivedAddress = this.publicKeyToAddress(input.publicKey);
     if (derivedAddress !== input.walletPkh) {
       this.logger.warn(`[auth] pkh mismatch expected=${input.walletPkh} derived=${derivedAddress}`);
       throw new UnauthorizedException('Public key does not match wallet address');
     }
 
-    // 6. User upsert (idempotent)
+    // 6. User upsert (idempotent — ilk bağlanışta oluştur)
     await this.prisma.user.upsert({
       where: { walletPkh: input.walletPkh },
       create: { walletPkh: input.walletPkh },
@@ -112,7 +142,14 @@ export class AuthService {
   }
 
   /**
-   * Canonical message (client + server aynı format üretmeli).
+   * Canonical SIWW message (client + server aynı format üretmeli).
+   *
+   * Format:
+   *   GalataBaker SIWW
+   *   domain: <SIWW_DOMAIN>
+   *   nonce: <base64url nonce>
+   *   timestamp: <unix seconds>
+   *
    * Public — ChallengeService ve test helper'lar kullanır.
    */
   buildCanonicalMessage(nonce: string, timestamp: number): string {
@@ -125,66 +162,78 @@ export class AuthService {
   }
 
   /**
-   * Tezos ed25519 signature doğrulama (TZIP-XXX signed message format).
+   * Tezos SIWW imza doğrulama (TZIP-32).
+   *
+   * @taquito/utils verifySignature(message, pk, sig, watermark):
+   *   - `pk` ve `sig`'i base58 decode eder (prefix check)
+   *   - mergebuf(watermark, message) çağırır
+   *   - blake2b(merged, 32) hash'ler
+   *   - curve dispatch (ed25519 için ed25519.verify)
+   *
+   * Burada `message` parametresi payload'ın watermark-sonrası kısmı:
+   *   [msgLen] [msg] [pubkey]
    *
    * @returns true if signature is valid for given public key and message
-   * @throws if public key or signature format is invalid
+   * @throws if public key or signature format is invalid (prefix/length/checksum)
    */
-  verifyTezosEd25519Signature(
-    publicKeyB58: string,
-    signatureB58: string,
-    message: string,
-  ): boolean {
-    if (!publicKeyB58.startsWith('edpk') || !signatureB58.startsWith('edsig')) {
-      return false;
+  verifyTezosSignedMessage(publicKeyB58: string, signatureB58: string, message: string): boolean {
+    // MVP'de sadece edpk/tz1 destekliyoruz — prefix check'i en başta yap ki
+    // Taquito'nun b58DecodeAndCheckPrefix'i generic "PREFIX_NOT_ALLOWED"
+    // hatası fır-latmasın, bizim net mesajımız dönsün.
+    if (!publicKeyB58.startsWith(PrefixV2.Ed25519PublicKey)) {
+      throw new Error('Only edpk (tz1) public keys supported in MVP');
     }
 
-    const publicKey = bs58check.decode(publicKeyB58);
-    const signature = bs58check.decode(signatureB58);
-
+    // Public key → raw 32 bytes (suffix olarak payload'a eklemek için)
+    // Taquito verifySignature kendi içinde tekrar decode edecek, fakat
+    // payload'ın suffix'inde raw pubkey lazım.
+    const [publicKey] = b58DecodeAndCheckPrefix(publicKeyB58, [PrefixV2.Ed25519PublicKey]);
     if (publicKey.length !== 32) {
       throw new Error(`Invalid public key length: ${publicKey.length}`);
     }
-    if (signature.length !== 64) {
-      throw new Error(`Invalid signature length: ${signature.length}`);
-    }
 
-    // Build signed payload: watermark + msgLen + msg + pubkey
-    const watermark = concatBytes(
-      new Uint8Array([0x01, 0x09]),
-      utf8ToBytes('Tezos Signed Message:\n'),
-    );
+    // Message → UTF-8 bytes + 4-byte big-endian length prefix
     const msgBytes = utf8ToBytes(message);
     const msgLen = new Uint8Array(4);
     new DataView(msgLen.buffer).setUint32(0, msgBytes.length, false);
 
-    const signedPayload = concatBytes(watermark, msgLen, msgBytes, publicKey);
+    // Watermark-sonrası payload: msgLen || msg || pubkey
+    // Taquito watermark'ı prepend edip blake2b-256 hash'leyecek.
+    const messagePart = concatBytes(msgLen, msgBytes, publicKey);
 
-    return ed25519.verify(signature, signedPayload, publicKey);
+    try {
+      return verifySignature(messagePart, publicKeyB58, signatureB58, TEZOS_WATERMARK);
+    } catch {
+      // Corrupted signature / invalid checksum / wrong curve — auth fails silently
+      // (caller will translate false → 401 "Signature verification failed")
+      return false;
+    }
   }
 
   /**
    * Public key (edpk) → Tezos address (tz1).
    *
-   *   blake2b(publicKey, 20 bytes) → prepend 0x00 0x01 0xa7 → base58check
+   * Resmi Taquito `getPkhfromPk()` kullanır — tüm 4 curve'ü (ed25519,
+   * secp256k1, p256, bls12-381) doğru tanır. Prefix'ler:
+   *   tz1 (ed25519)      [0x06, 0xa1, 0x9f]  ← 3 byte
+   *   tz2 (secp256k1)    [0x06, 0xa1, 0xa1]
+   *   tz3 (p256)         [0x06, 0xa1, 0xa4]
+   *   tz4 (bls12-381)    [0x06, 0xa1, 0xa6]
+   *
+   * NOT: MVP'de sadece edpk/tz1 kabul ediyoruz — Taquito getPkhfromPk
+   * tüm curve'leri doğru derive eder, fakat publicKeyToAddress'ı
+   * `verifyTezosSignedMessage` ile aynı kısıtta tutuyoruz (tutarlılık).
+   *
+   * @throws UnauthorizedException if public key is not edpk (tz1) format
    */
   publicKeyToAddress(publicKeyB58: string): string {
-    if (!publicKeyB58.startsWith('edpk')) {
-      throw new UnauthorizedException('Only edpk (tz1) supported in MVP');
+    if (!publicKeyB58.startsWith(PrefixV2.Ed25519PublicKey)) {
+      throw new UnauthorizedException('Only edpk (tz1) public keys supported in MVP');
     }
-    const publicKey = bs58check.decode(publicKeyB58);
-    if (publicKey.length !== 32) {
-      throw new UnauthorizedException('Invalid public key length');
+    try {
+      return getPkhfromPk(publicKeyB58);
+    } catch (err) {
+      throw new UnauthorizedException(`Invalid public key: ${(err as Error).message}`);
     }
-
-    // 1. Blake2b hash (20 bytes)
-    const hash = blake2b(publicKey, { dkLen: 20 });
-
-    // 2. Prepend tz1 prefix bytes
-    const prefix = new Uint8Array([0x00, 0x01, 0xa7]);
-    const addressBytes = concatBytes(prefix, hash);
-
-    // 3. Base58check encode
-    return bs58check.encode(addressBytes);
   }
 }

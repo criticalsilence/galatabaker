@@ -96,6 +96,9 @@ importers:
       '@prisma/client':
         specifier: ^5.20.0
         version: 5.22.0(prisma@5.22.0)
+      '@taquito/utils':
+        specifier: ^24.3.0
+        version: 24.3.0
       bs58check:
         specifier: 3.0.1
         version: 3.0.1
@@ -1021,6 +1024,10 @@ packages:
     resolution: {integrity: sha512-warwspo+UYUPep0Q+vtdVB4Ugn8GGQj8iyB3gnRWsztmUHTI3S1nhdiWNsPUGL0vud7JlRRk1XEu7Lq1KGTnMQ==}
     engines: {node: ^14.21.3 || >=16}
 
+  '@noble/curves@1.9.7':
+    resolution: {integrity: sha512-gbKGcRUYIjA3/zCCNaWDciTMFI0dCkvou3TL8Zmy5Nc7sJ47a0jtOeZoTaMxkuqRo9cRhjOdZJXegxYE5FN/xw==}
+    engines: {node: ^14.21.3 || >=16}
+
   '@noble/curves@2.2.0':
     resolution: {integrity: sha512-T/BoHgFXirb0ENSPBquzX0rcjXeM6Lo892a2jlYJkqk83LqZx0l1Of7DzlKJ6jkpvMrkHSnAcgb5JegL8SeIkQ==}
     engines: {node: '>= 20.19.0'}
@@ -1453,6 +1460,10 @@ packages:
     resolution: {integrity: sha512-8MrQBg915r/GYSqAYIhx9b51vdrtW68S/5yMCdNvYc6xL5d92wIrXCy6gEkNkIS0kZyTQGfFgfWy6KyJZaIhNw==}
     engines: {node: '>=18'}
 
+  '@taquito/core@24.3.0':
+    resolution: {integrity: sha512-NReAUkdJVY8Dsdw0fykJTaYsdEPL5VHh6Ydc9LD96SHW7WowkKxOuYsmcocxSWOjiVmHrsjWR4slAy9QD/gK6w==}
+    engines: {node: '>=22'}
+
   '@taquito/http-utils@17.5.2':
     resolution: {integrity: sha512-DQnjsHsgXELeUl59gdRTXy9U72RTWa27z7h2s4mRuQ5W4EYQRCWGbb5cOlUcZlEmNjcWCuVk+JBbULvgRk6N/g==}
     engines: {node: '>=18'}
@@ -1484,6 +1495,10 @@ packages:
   '@taquito/utils@17.5.2':
     resolution: {integrity: sha512-gtdQzInxbmylKHDAjUIW0npYWYUAyDwhPsFXdF/r7juM6g+qxB7WFbt7vZAYlA4gwwHxPSehehvBkHvEPQ3UWQ==}
     engines: {node: '>=18'}
+
+  '@taquito/utils@24.3.0':
+    resolution: {integrity: sha512-G2z+1fRg2jpK1qsdfRtdRxLNwtSTfXI2x29HP3qKFhKz+uCoPQfrClfqBSHkJoy6SzxSZhU3BOoQ4x983hhkfQ==}
+    engines: {node: '>=22'}
 
   '@tokenizer/inflate@0.2.7':
     resolution: {integrity: sha512-MADQgmZT1eKjp06jpI2yozxaU9uVs4GzzgSL+uEq7bVcJ9V1ZXQkeGNql1fsSI0gMy1vhvNTNbUqrx+pZfJVmg==}
@@ -2076,6 +2091,9 @@ packages:
     resolution: {integrity: sha512-IMDedajPifLnHNY0X9n8hKxRTQ6/eTHwr5bDo04WnuqxyKw6LYtQywCuuqPZwhl3aBXMvQpJov42GLCwRRdQzw==}
     engines: {node: '>=6.0.0'}
     hasBin: true
+
+  bignumber.js@10.0.2:
+    resolution: {integrity: sha512-E8Wp9O06QA6lneJ4aRUXKYf/1GIomqUEmUMwtIOMtDxf1U52ffJY+y7JBk/8wRafA8qOIqLnXQGqonYXZdBnFQ==}
 
   bignumber.js@9.3.1:
     resolution: {integrity: sha512-Ko0uX15oIUS7wJ3Rb30Fs6SkVbLmPBAKdlm7q9+ak9bbIeFf0MwuBsQV6z7+X768/cHsfg+WlysDWJcmthjsjQ==}
@@ -5865,6 +5883,10 @@ snapshots:
     dependencies:
       '@noble/hashes': 1.7.1
 
+  '@noble/curves@1.9.7':
+    dependencies:
+      '@noble/hashes': 1.8.0
+
   '@noble/curves@2.2.0':
     dependencies:
       '@noble/hashes': 2.2.0
@@ -6296,6 +6318,10 @@ snapshots:
     dependencies:
       json-stringify-safe: 5.0.1
 
+  '@taquito/core@24.3.0':
+    dependencies:
+      json-stringify-safe: 5.0.1
+
   '@taquito/http-utils@17.5.2':
     dependencies:
       '@taquito/core': 17.5.2
@@ -6378,6 +6404,18 @@ snapshots:
       elliptic: 6.6.1
       typedarray-to-buffer: 4.0.0
 
+  '@taquito/utils@24.3.0':
+    dependencies:
+      '@noble/curves': 1.9.7
+      '@noble/hashes': 2.2.0
+      '@taquito/core': 24.3.0
+      '@types/bs58check': 2.1.2
+      bignumber.js: 10.0.2
+      blakejs: 1.2.1
+      bs58check: 3.0.1
+      buffer: 6.0.3
+      typedarray-to-buffer: 4.0.0
+
   '@tokenizer/inflate@0.2.7':
     dependencies:
       debug: 4.4.3
@@ -6407,7 +6445,7 @@ snapshots:
 
   '@types/bs58check@2.1.2':
     dependencies:
-      '@types/node': 20.19.42
+      '@types/node': 22.19.20
 
   '@types/bs58check@3.0.1':
     dependencies:
@@ -7211,6 +7249,8 @@ snapshots:
   base64-js@1.5.1: {}
 
   baseline-browser-mapping@2.10.34: {}
+
+  bignumber.js@10.0.2: {}
 
   bignumber.js@9.3.1: {}
 
