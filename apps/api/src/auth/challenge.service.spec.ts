@@ -11,7 +11,7 @@
 import { Logger } from '@nestjs/common';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { loadAuthConfig } from './auth.config.js';
+import { loadAuthConfig, type AuthConfig } from './auth.config.js';
 import { ChallengeService } from './challenge.service.js';
 
 const TEST_CONFIG: AuthConfig = loadAuthConfig({
