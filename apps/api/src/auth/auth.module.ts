@@ -7,8 +7,9 @@
  *   - AUTH_CONFIG token: env'den zod-validated config
  *   - JwtModule: HS256 signing, TTL config'den
  *   - ChallengeService: in-memory nonce store
- *   - AuthService: SIWW verify + User upsert + JWT
+ *   - AuthService: SIWW verify + User upsert + JWT + register_notification
  *   - AuthController: GET /challenge, POST /verify
+ *   - NotificationsModule: register_confirmation trigger on first-time SIWW
  *
  * Export'lar:
  *   - AuthService: başka modüller (örn. Telegram callback) SIWW
@@ -16,9 +17,11 @@
  *   - JwtAuthGuard: protected route'lar
  *   - AUTH_CONFIG: config gerekirse
  */
-import { Global, Module } from '@nestjs/common';
+import { Global, Module, forwardRef } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
+
+import { NotificationsModule } from '../notifications/notifications.module.js';
 
 import { loadAuthConfig, AUTH_CONFIG, type AuthConfig } from './auth.config.js';
 import { AuthController } from './auth.controller.js';
@@ -39,6 +42,10 @@ import { JwtAuthGuard } from './guards/jwt-auth.guard.js';
         };
       },
     }),
+    // forwardRef: NotificationsModule also imports AuthModule (for JwtAuthGuard
+    // on NotificationsController). Without this, NestJS circular-dependency
+    // detection refuses to load either module.
+    forwardRef(() => NotificationsModule),
   ],
   controllers: [AuthController],
   providers: [

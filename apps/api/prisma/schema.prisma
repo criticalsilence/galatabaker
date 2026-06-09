@@ -132,9 +132,11 @@ model Notification {
   body      String
   sent      Boolean             @default(false)
   sentAt    DateTime?
+  readAt    DateTime?
   error     String?
   createdAt DateTime            @default(now())
 
   @@index([sent, createdAt])
   @@index([userId])
+  @@index([userId, readAt])
 }

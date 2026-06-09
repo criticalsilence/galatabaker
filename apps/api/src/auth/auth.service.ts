@@ -50,6 +50,7 @@ import { JwtService } from '@nestjs/jwt';
 import { concatBytes, utf8ToBytes } from '@noble/hashes/utils.js';
 import { b58DecodeAndCheckPrefix, getPkhfromPk, PrefixV2, verifySignature } from '@taquito/utils';
 
+import { NotificationService } from '../notifications/notification.service.js';
 import { PrismaService } from '../prisma/prisma.service.js';
 
 import { AUTH_CONFIG, type AuthConfig } from './auth.config.js';
@@ -77,6 +78,7 @@ export class AuthService {
     private readonly challenges: ChallengeService,
     private readonly prisma: PrismaService,
     private readonly jwt: JwtService,
+    private readonly notifications: NotificationService,
   ) {}
 
   /**
@@ -120,19 +122,40 @@ export class AuthService {
       throw new UnauthorizedException('Public key does not match wallet address');
     }
 
-    // 6. User upsert (idempotent — ilk bağlanışta oluştur)
-    await this.prisma.user.upsert({
+    // 6. User upsert (idempotent — ilk bağlanışta oluştur).
+    //    upsert yerine findUnique + create yapıyoruz ki "ilk bağlanış"
+    //    olayını yakalayıp register_confirmation notification'ı tetikleyelim.
+    let isFirstTime = false;
+    const existing = await this.prisma.user.findUnique({
       where: { walletPkh: input.walletPkh },
-      create: { walletPkh: input.walletPkh },
-      update: {},
     });
+    if (!existing) {
+      await this.prisma.user.create({ data: { walletPkh: input.walletPkh } });
+      isFirstTime = true;
+    }
 
     // 7. JWT sign
     const payload: Omit<JWTPayload, 'iat' | 'exp'> = { sub: input.walletPkh };
     const accessToken = await this.jwt.signAsync(payload);
     const decoded = this.jwt.decode<JWTPayload>(accessToken);
 
-    this.logger.log(`[auth] SIWW success pkh=${input.walletPkh}`);
+    this.logger.log(`[auth] SIWW success pkh=${input.walletPkh} firstTime=${isFirstTime}`);
+
+    // 8. Trigger: register_confirmation on first-time users (fire-and-forget).
+    //    NotificationService handles its own errors — we don't await failure.
+    if (isFirstTime) {
+      void this.notifications
+        .enqueue({
+          walletPkh: input.walletPkh,
+          kind: 'register_confirmation',
+          vars: { walletPkh: input.walletPkh },
+        })
+        .catch((err) =>
+          this.logger.warn(
+            `[auth] register_notification enqueue failed: ${(err as Error).message}`,
+          ),
+        );
+    }
 
     return {
       accessToken,

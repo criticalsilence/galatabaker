@@ -24,6 +24,8 @@ import { concatBytes, utf8ToBytes } from '@noble/hashes/utils.js';
 import { b58Encode, getPkhfromPk, PrefixV2 } from '@taquito/utils';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
+import { NotificationService } from '../notifications/notification.service.js';
+import type { EnqueueInput } from '../notifications/notification.types.js';
 import { PrismaService } from '../prisma/prisma.service.js';
 
 import { AUTH_CONFIG, type AuthConfig, loadAuthConfig } from './auth.config.js';
@@ -88,11 +90,23 @@ const TEST_CONFIG: AuthConfig = loadAuthConfig({
 
 // ── Mock factories ────────────────────────────────────────────────────
 
+/**
+ * In-memory Prisma mock — supports findUnique + create for AuthService's
+ * "first-time vs returning user" detection. Tests can also pre-load
+ * `user.findUnique.mockResolvedValue({ ... })` to simulate an existing
+ * user, or leave it as null for a fresh signup.
+ */
 function makeMockPrisma(): {
-  user: { upsert: ReturnType<typeof vi.fn> };
+  user: {
+    findUnique: ReturnType<typeof vi.fn>;
+    create: ReturnType<typeof vi.fn>;
+  };
 } {
   return {
-    user: { upsert: vi.fn().mockResolvedValue({}) },
+    user: {
+      findUnique: vi.fn().mockResolvedValue(null),
+      create: vi.fn().mockResolvedValue({}),
+    },
   };
 }
 
@@ -119,6 +133,15 @@ interface BuiltService {
 async function buildService(opts?: { challengeConsume?: boolean }): Promise<BuiltService> {
   const prisma = makeMockPrisma();
   const challenges = makeMockChallenges(opts?.challengeConsume ?? true);
+  // NotificationService stub — enqueue() returns the IDs the test wants, or
+  // nothing if the test doesn't care. We capture calls for assertions.
+  const enqueueCalls: EnqueueInput[] = [];
+  const notifications = {
+    enqueue: vi.fn(async (i: EnqueueInput) => {
+      enqueueCalls.push(i);
+      return ['test-notif-id'];
+    }),
+  };
 
   const moduleRef = await Test.createTestingModule({
     imports: [
@@ -131,6 +154,7 @@ async function buildService(opts?: { challengeConsume?: boolean }): Promise<Buil
       { provide: AUTH_CONFIG, useValue: TEST_CONFIG },
       { provide: PrismaService, useValue: prisma },
       { provide: ChallengeService, useValue: challenges },
+      { provide: NotificationService, useValue: notifications },
       AuthService,
     ],
   }).compile();
@@ -271,10 +295,12 @@ describe('AuthService', () => {
       expect(result.walletPkh).toBe(kp.walletPkh);
       expect(typeof result.expiresAt).toBe('number');
       expect(challenges.consume).toHaveBeenCalledWith(nonce);
-      expect(prisma.user.upsert).toHaveBeenCalledWith({
+      // first-time user: findUnique returns null, then create runs
+      expect(prisma.user.findUnique).toHaveBeenCalledWith({
         where: { walletPkh: kp.walletPkh },
-        create: { walletPkh: kp.walletPkh },
-        update: {},
+      });
+      expect(prisma.user.create).toHaveBeenCalledWith({
+        data: { walletPkh: kp.walletPkh },
       });
     });
 
@@ -352,6 +378,11 @@ describe('AuthService', () => {
     it('idempotent: re-connecting same wallet reuses existing user row', async () => {
       const { service, prisma } = await buildService();
       const kp = makeKeyPair('idempotent');
+      // Pre-seed: user already exists, so create() must NOT run.
+      prisma.user.findUnique.mockResolvedValueOnce({
+        id: 'existing-user-id',
+        walletPkh: kp.walletPkh,
+      });
       const ts = Math.floor(Date.now() / 1000);
       const nonce = 'idem-nonce';
       const message = service.buildCanonicalMessage(nonce, ts);
@@ -365,8 +396,11 @@ describe('AuthService', () => {
         timestamp: ts,
       });
 
-      // upsert should be called with empty `update` (idempotent — no fields changed)
-      expect(prisma.user.upsert).toHaveBeenCalledWith(expect.objectContaining({ update: {} }));
+      // findUnique was called, but create() was NOT — the user already existed.
+      expect(prisma.user.findUnique).toHaveBeenCalledWith({
+        where: { walletPkh: kp.walletPkh },
+      });
+      expect(prisma.user.create).not.toHaveBeenCalled();
     });
   });
 });

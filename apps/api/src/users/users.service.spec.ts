@@ -12,14 +12,20 @@
  * değerler `email: { contains: RUN }` filtresiyle yakalanır ve silinir.
  */
 
-import { afterEach, describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 
+import type { NotificationService } from '../notifications/notification.service.js';
 import { PrismaService } from '../prisma/prisma.service.js';
 
 import { UsersService } from './users.service.js';
 
 const prisma = new PrismaService();
-const service = new UsersService(prisma);
+const notificationsStub = {
+  enqueue: vi.fn().mockResolvedValue([]),
+  listByUser: vi.fn().mockResolvedValue({ data: [], total: 0, unreadCount: 0 }),
+  markRead: vi.fn().mockResolvedValue({ marked: false }),
+} as unknown as NotificationService;
+const service = new UsersService(prisma, notificationsStub);
 
 const RUN = `t${Date.now()
   .toString(36)

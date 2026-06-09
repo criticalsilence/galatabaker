@@ -19,6 +19,8 @@ import { afterAll, afterEach, beforeAll, describe, expect, it } from 'vitest';
 
 import { AuthModule } from '../auth/auth.module.js';
 import { ZodValidationPipe } from '../common/zod-validation.pipe.js';
+import { EmailModule } from '../email/email.module.js';
+import { NotificationService } from '../notifications/notification.service.js';
 import { PrismaModule } from '../prisma/prisma.module.js';
 import { PrismaService } from '../prisma/prisma.service.js';
 
@@ -49,8 +51,18 @@ describe('UsersController (HTTP)', () => {
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
       controllers: [UsersController],
-      imports: [ConfigModule.forRoot({ isGlobal: true }), AuthModule, PrismaModule],
-      providers: [UsersService],
+      imports: [
+        ConfigModule.forRoot({ isGlobal: true }),
+        AuthModule,
+        PrismaModule,
+        EmailModule, // NotificationsModule (imported by AuthModule) needs EmailService
+      ],
+      providers: [
+        UsersService,
+        // UsersService now depends on NotificationService. Stub it — these
+        // HTTP tests don't care about the email/telegram audit row.
+        { provide: NotificationService, useValue: { enqueue: () => Promise.resolve([]) } },
+      ],
     })
       .overrideGuard('JwtAuthGuard')
       .useValue({ canActivate: () => true })

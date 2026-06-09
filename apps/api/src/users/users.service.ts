@@ -25,10 +25,12 @@ import { randomBytes } from 'node:crypto';
 import {
   ConflictException,
   Injectable,
+  Logger,
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
 
+import { NotificationService } from '../notifications/notification.service.js';
 import { PrismaService } from '../prisma/prisma.service.js';
 
 export interface RegisterUserInput {
@@ -70,7 +72,12 @@ const CONSENT_VERSION = 'v1.0-2026-06';
 
 @Injectable()
 export class UsersService {
-  constructor(private readonly prisma: PrismaService) {}
+  private readonly logger = new Logger(UsersService.name);
+
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly notifications: NotificationService,
+  ) {}
 
   /**
    * DEPRECATED — kullanımdan kaldırıldı, /api/auth/verify kullanılacak.
@@ -126,6 +133,22 @@ export class UsersService {
       expiresAt: Date.now() + 24 * 60 * 60 * 1000,
     });
 
+    // Audit trail: enqueue email_verify notification (EMAIL channel only).
+    // The actual verification email (with token URL) is still sent by the
+    // controller via EmailService — this row is the record.
+    void this.notifications
+      .enqueue({
+        walletPkh,
+        kind: 'email_verify',
+        vars: { email: normalized, link: '(sent via EmailService.sendVerification)' },
+        channels: ['EMAIL'],
+      })
+      .catch((err) =>
+        this.logger.warn(
+          `[users] email_verify enqueue failed pkh=${walletPkh.slice(0, 8)}…: ${(err as Error).message}`,
+        ),
+      );
+
     return { verificationToken: token };
   }
 
@@ -159,6 +182,20 @@ export class UsersService {
       where: { walletPkh },
       data: { telegramChatId: chatId, telegramVerified: true },
     });
+
+    // Audit trail: telegram_link notification (TELEGRAM channel only).
+    void this.notifications
+      .enqueue({
+        walletPkh,
+        kind: 'telegram_link',
+        vars: {},
+        channels: ['TELEGRAM'],
+      })
+      .catch((err) =>
+        this.logger.warn(
+          `[users] telegram_link enqueue failed pkh=${walletPkh.slice(0, 8)}…: ${(err as Error).message}`,
+        ),
+      );
   }
 
   /**
