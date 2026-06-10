@@ -74,6 +74,26 @@ export interface GalataBakerWallet {
   getAddress: () => Promise<string>;
   getActiveAccount: () => Promise<ActiveAccount | null>;
   /**
+   * TZIP-32 plain message imzala (SIWW + future genel sign flow).
+   *
+   * Akış:
+   *   1. Beacon `requestSignPayload({ signingType: 'message', payload, sourceAddress })`
+   *   2. Cüzdan otomatik olarak payload'ı hex decode eder, 4-byte big-endian
+   *      length prefix + raw pubkey (32 bytes) ekler, TZIP-32 watermark
+   *      (`0x01 || "Tezos Signed Message:\n"`) prepend eder, blake2b-256
+   *      hash'ler ve ed25519 private key ile imzalar.
+   *   3. Sonuç: `edsig...` (base58).
+   *
+   * Server (apps/api/src/auth/auth.service.ts) aynı payload'ı yeniden kurup
+   * aynı hash üzerinde imzayı doğrular — bu yüzden payload formatı
+   * server ile birebir aynı olmalı; SDK bu yüzden `signingType: 'message'`
+   * kullanıyor, raw payload göndermiyor.
+   *
+   * @throws No active account / wallet not connected
+   * @throws User rejected signature
+   */
+  signMessage: (message: string) => Promise<{ signature: string; publicKey: string }>;
+  /**
    * Beacon transport'unu kapat (localStorage temizlenmez).
    * Genellikle `destroy()` tercih edilir.
    */
@@ -159,6 +179,40 @@ export function createWallet(options: CreateWalletOptions = {}): GalataBakerWall
       const account = await wallet.client.getActiveAccount();
       if (!account) throw new Error('No active Beacon account');
       return account.address;
+    },
+    /**
+     * TZIP-32 plain message imzala. Beacon 4.x:
+     *   - payload hex string (UTF-8 bytes)
+     *   - signingType: 'message' (TZIP-32 plain — prepends watermark,
+     *     4-byte msgLen, appends raw pubkey, blake2b-256, then ed25519)
+     *   - sourceAddress gerekli değil ama açıkça geçmek multi-account
+     *     cüzdanlarda (Kukai) doğru hesabı seçmeye yardımcı olur.
+     *
+     * Notlar:
+     *   - signMessage'dan önce `getActiveAccount().publicKey` lazım —
+     *     getActiveAccount ilk kez çağrıldığında `permissionInfo`
+     *     response'undan doldurulur (requestPermissions sonrası).
+     *   - publicKey yoksa Temple wallet lock'lu veya kullanıcı
+     *     "permission" vermemiş olabilir.
+     */
+    signMessage: async (message: string) => {
+      const account = await wallet.client.getActiveAccount();
+      if (!account) throw new Error('No active Beacon account — connect first');
+      if (!account.publicKey) {
+        throw new Error('No public key on active account — wallet may be locked');
+      }
+      // Browser + Node 18+ TextEncoder mevcut; Beacon payload hex bekler.
+      const bytes = new TextEncoder().encode(message);
+      const hexPayload = Array.from(bytes, (b) => b.toString(16).padStart(2, '0')).join('');
+      const response = await wallet.client.requestSignPayload({
+        // Beacon SDK's `SigningType` enum comes from @airgap/beacon-dapp
+        // which has no .d.ts, so we cast the literal. Runtime value
+        // matches SigningType.MESSAGE.
+        signingType: 'message' as never,
+        payload: hexPayload,
+        sourceAddress: account.address,
+      });
+      return { signature: response.signature, publicKey: account.publicKey };
     },
     /**
      * Disconnect (sadece Beacon'ın kendi API'sini çağırır; localStorage

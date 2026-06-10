@@ -12,6 +12,7 @@ vi.mock('@taquito/beacon-wallet', () => {
         getAvailableWallets: vi.fn().mockResolvedValue([]),
         removeAllAccounts: vi.fn().mockResolvedValue(undefined),
         removeAllPeers: vi.fn().mockResolvedValue(undefined),
+        requestSignPayload: vi.fn(),
       },
       requestPermissions: vi.fn().mockResolvedValue(undefined),
       disconnect: vi.fn().mockResolvedValue(undefined),
@@ -154,6 +155,107 @@ describe('isAnyWalletAvailable', () => {
         }) as unknown as BeaconWallet,
     );
     expect(await isAnyWalletAvailable(50)).toBe(false);
+  });
+});
+
+describe('signMessage', () => {
+  it('returns signature and publicKey from Beacon requestSignPayload', async () => {
+    const requestSignPayload = vi.fn().mockResolvedValue({
+      signature: 'edsigXXX',
+    });
+    const getActiveAccount = vi.fn().mockResolvedValue({
+      address: 'tz1test',
+      publicKey: 'edpkYYY',
+    });
+    vi.mocked(BeaconWallet).mockImplementationOnce(
+      () =>
+        ({
+          client: {
+            subscribeToEvent: vi.fn(),
+            getActiveAccount,
+            getAvailableWallets: vi.fn(),
+            removeAllAccounts: vi.fn(),
+            removeAllPeers: vi.fn(),
+            requestSignPayload,
+          },
+          requestPermissions: vi.fn(),
+          disconnect: vi.fn(),
+        }) as unknown as BeaconWallet,
+    );
+
+    const w = createWallet();
+    const result = await w.signMessage('Hello SIWW');
+
+    expect(result.signature).toBe('edsigXXX');
+    expect(result.publicKey).toBe('edpkYYY');
+    expect(requestSignPayload).toHaveBeenCalledWith({
+      signingType: 'message',
+      payload: '48656c6c6f2053495757', // "Hello SIWW" hex
+      sourceAddress: 'tz1test',
+    });
+  });
+
+  it('encodes the message as UTF-8 hex', async () => {
+    const requestSignPayload = vi.fn().mockResolvedValue({ signature: 'edsig' });
+    vi.mocked(BeaconWallet).mockImplementationOnce(
+      () =>
+        ({
+          client: {
+            subscribeToEvent: vi.fn(),
+            getActiveAccount: vi.fn().mockResolvedValue({
+              address: 'tz1t',
+              publicKey: 'edpk',
+            }),
+            getAvailableWallets: vi.fn(),
+            removeAllAccounts: vi.fn(),
+            removeAllPeers: vi.fn(),
+            requestSignPayload,
+          },
+          requestPermissions: vi.fn(),
+          disconnect: vi.fn(),
+        }) as unknown as BeaconWallet,
+    );
+
+    const w = createWallet();
+    // "Türkçe" → 0xC3 0xBC for ü, etc. (multi-byte UTF-8)
+    await w.signMessage('Türkçe');
+    const call = requestSignPayload.mock.calls[0][0];
+    expect(call.signingType).toBe('message');
+    expect(call.sourceAddress).toBe('tz1t');
+    // Decode hex back to verify UTF-8 roundtrip
+    const hexPayload = call.payload as string;
+    const bytes = new Uint8Array(hexPayload.match(/.{1,2}/g)!.map((h) => parseInt(h, 16)));
+    expect(new TextDecoder().decode(bytes)).toBe('Türkçe');
+  });
+
+  it('throws when no active account', async () => {
+    const w = createWallet();
+    await expect(w.signMessage('msg')).rejects.toThrow(/No active Beacon account/);
+  });
+
+  it('throws when account has no publicKey (wallet locked?)', async () => {
+    vi.mocked(BeaconWallet).mockImplementationOnce(
+      () =>
+        ({
+          client: {
+            subscribeToEvent: vi.fn(),
+            getActiveAccount: vi.fn().mockResolvedValue({ address: 'tz1' }), // no publicKey
+            getAvailableWallets: vi.fn(),
+            removeAllAccounts: vi.fn(),
+            removeAllPeers: vi.fn(),
+            requestSignPayload: vi.fn(),
+          },
+          requestPermissions: vi.fn(),
+          disconnect: vi.fn(),
+        }) as unknown as BeaconWallet,
+    );
+    const w = createWallet();
+    await expect(w.signMessage('msg')).rejects.toThrow(/No public key/);
+  });
+
+  it('returns the method on the wallet object', () => {
+    const w = createWallet();
+    expect(w.signMessage).toBeTypeOf('function');
   });
 });
 
