@@ -1,15 +1,17 @@
 # @galatabaker/web
 
-Next.js 14 dashboard — Ushuaia testnet MVP.
+Next.js 15 dashboard — Bakingnet testnet MVP.
 
 ## Pages
 
-| Route        | Purpose                                        |
-| ------------ | ---------------------------------------------- |
-| `/`          | Landing + wallet connect                       |
-| `/dashboard` | Network status, block height, links to actions |
-| `/delegate`  | (Adım 5) Delegation flow with baker picker     |
-| `/rewards`   | (Adım 5) Read-only reward history              |
+| Route | Purpose                  |
+| ----- | ------------------------ |
+| `/`   | Landing + wallet connect |
+
+Other pages (`/dashboard`, `/delegate`, `/rewards`) are intentionally
+absent in MVP — they will be added in Task 12 (web↔api integration)
+when the API endpoints are wired up. The landing page is the only
+piece that needs to work end-to-end right now (SIWW + wallet connect).
 
 ## Architecture
 
@@ -31,5 +33,5 @@ Next.js 14 dashboard — Ushuaia testnet MVP.
 ```bash
 pnpm --filter @galatabaker/web dev      # http://localhost:3000
 pnpm --filter @galatabaker/web build    # production build
-pnpm --filter @galatabaker/web test     # vitest
+pnpm --filter @galatabaker/web typecheck
 ```

@@ -1,5 +1,3 @@
-import Link from 'next/link';
-
 import { WalletConnect } from '@/components/wallet-connect';
 
 export const dynamic = 'force-dynamic';
@@ -13,15 +11,9 @@ export default function HomePage() {
           Tezos baking and delegation, made simple.
         </p>
         <p className="mt-2 text-sm text-muted-foreground">MVP — Bakingnet testnet</p>
-        <div className="mt-8 flex flex-wrap justify-center gap-3">
+        <section className="mt-8 flex flex-wrap justify-center">
           <WalletConnect />
-          <Link
-            href="/dashboard"
-            className="inline-flex items-center justify-center rounded-md border border-input bg-background px-4 py-2 text-sm font-medium hover:bg-accent"
-          >
-            Open Dashboard
-          </Link>
-        </div>
+        </section>
       </section>
 
       <section className="mt-16 grid gap-6 sm:grid-cols-3">
