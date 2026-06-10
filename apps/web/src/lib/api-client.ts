@@ -37,7 +37,7 @@ export interface RequestOptions {
   /** Bearer token; omit for public endpoints. */
   token?: string | null;
   /** Query string params; null/undefined values are dropped. */
-  query?: Record<string, string | number | boolean | null | undefined>;
+  query?: Record<string, unknown> | object;
   /** Pre-built URLSearchParams for complex queries. */
   searchParams?: URLSearchParams;
   /** Request body (auto-JSON-stringified). */
@@ -56,7 +56,7 @@ function buildUrl(path: string, opts: RequestOptions = {}): string {
     opts.searchParams.forEach((v, k) => params.append(k, v));
   }
   if (opts.query) {
-    for (const [k, v] of Object.entries(opts.query)) {
+    for (const [k, v] of Object.entries(opts.query as Record<string, unknown>)) {
       if (v === null || v === undefined) continue;
       params.append(k, String(v));
     }
