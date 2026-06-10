@@ -140,3 +140,12 @@ model Notification {
   @@index([userId])
   @@index([userId, readAt])
 }
+
+/// Generic key-value table for indexer state (e.g. last seen block
+/// level per resource). The indexer upserts rows here so it can
+/// resume after a restart without re-scanning the whole chain.
+model IndexerState {
+  key        String   @id
+  value      BigInt
+  updatedAt  DateTime @updatedAt
+}

@@ -3,10 +3,26 @@
   "version": "0.0.0",
   "private": true,
   "type": "module",
-  "description": "Cycle/reward watcher (Adım 6)",
+  "description": "TzKT cycle watcher — keeps the DB in sync with the chain (Step 6)",
   "scripts": {
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
-    "test": "vitest run"
+    "test": "vitest run",
+    "build": "tsc -p tsconfig.build.json",
+    "start": "node dist/index.js",
+    "dev": "tsx watch src/index.ts"
+  },
+  "dependencies": {
+    "@galatabaker/api": "workspace:*",
+    "@prisma/client": "^5.22.0",
+    "dotenv": "^16.4.5",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/node": "^22.7.5",
+    "prisma": "^5.22.0",
+    "tsx": "^4.19.1",
+    "typescript": "^5.4",
+    "vitest": "^1.6.1"
   }
 }
