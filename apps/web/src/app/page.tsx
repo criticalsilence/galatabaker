@@ -1,4 +1,4 @@
-import { WalletConnect } from '@/components/wallet-connect';
+import { WalletPanel } from '@/features/connect-wallet/ui/WalletPanel';
 
 export const dynamic = 'force-dynamic';
 
@@ -12,7 +12,7 @@ export default function HomePage() {
         </p>
         <p className="mt-2 text-sm text-muted-foreground">MVP — Bakingnet testnet</p>
         <section className="mt-8 flex flex-wrap justify-center">
-          <WalletConnect />
+          <WalletPanel />
         </section>
       </section>
 
