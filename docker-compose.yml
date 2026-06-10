@@ -46,6 +46,19 @@ services:
     volumes:
       - mailhog-data:/maildir
 
+  indexer:
+    build:
+      context: .
+      dockerfile: apps/indexer/Dockerfile
+    container_name: galata-indexer
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql://galata:***@postgres:5432/galatabaker?schema=public
+      TZKT_BASE_URL: ${TZKT_BASE_URL:-https://api.bakingnet.tzkt.io}
+
 volumes:
   postgres-data:
   redis-data:
