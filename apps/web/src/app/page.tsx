@@ -1,23 +1,6 @@
-import nextDynamic from 'next/dynamic';
 import Link from 'next/link';
 
-// Beacon wallet yalnizca browser'da yasar (localStorage + WebSocket).
-// SSR sirasinda yuklenmesin diye nextDynamic + ssr:false kullaniyoruz.
-const WalletConnect = nextDynamic(
-  () => import('@/components/wallet-connect').then((m) => m.WalletConnect),
-  {
-    ssr: false,
-    loading: () => (
-      <button
-        type="button"
-        disabled
-        className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground opacity-50"
-      >
-        Connect Wallet
-      </button>
-    ),
-  },
-);
+import { WalletConnect } from '@/components/wallet-connect';
 
 export const dynamic = 'force-dynamic';
 
